@@ -19,10 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="FontRenderer.h" />
     <ClInclude Include="GameEngine.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="FontRenderer.cpp" />
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -82,7 +84,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)\Externals\SDL\include;$(ProjectDir)\Externals\glew\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\Externals\glm;$(ProjectDir)\Externals\SDL\include;$(ProjectDir)\Externals\glew\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\Externals\glew\lib\x86;$(ProjectDir)\Externals\SDL\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

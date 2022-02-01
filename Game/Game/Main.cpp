@@ -7,14 +7,12 @@
 
 using namespace GE;
 
-
 int main(int argc, char* argv[]) {
 
 	GameEngine gEngine = GameEngine(1);
 
 	if (!gEngine.init()) {
 		display_info_message("Could not start SDL. Check console for more details");
-
 		return -1;
 	}
 
@@ -34,11 +32,12 @@ int main(int argc, char* argv[]) {
 
 		if (delta > frame_second)
 		{		
+			gEngine.update();
+			gEngine.draw();
+
 			frame_count++;
 			last_time = current_time;
 
-			gEngine.update();
-			gEngine.draw();
 		}
 
 

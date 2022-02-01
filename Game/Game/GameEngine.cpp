@@ -67,6 +67,11 @@ bool GE::GameEngine::init()
 
 	std::cout << "SDL Init successful " << std::endl;
 
+
+	// init Camera
+	// Init Triangle Renderer
+
+
 	return true;
 }
 
@@ -103,16 +108,16 @@ void GE::GameEngine::draw()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 
-	glBegin(GL_POLYGON);
-	glColor3f(1.f, 1.f, 0.f);
-	glVertex2f(-1.0f, 0.f);
-	glColor3f(1.f, 1.f, 0.f);
-	glVertex2f(1.0f, 0.f);
-	glColor3f(1.f, 1.f, 0.f);
-	glVertex2f(.0f, 1.f);
+	//glBegin(GL_POLYGON);
+	//glColor3f(1.f, 1.f, 0.f);
+	//glVertex2f(-1.0f, 0.f);
+	//glColor3f(1.f, 1.f, 0.f);
+	//glVertex2f(1.0f, 0.f);
+	//glColor3f(1.f, 1.f, 0.f);
+	//glVertex2f(.0f, 1.f);
 
 
-	glEnd();
+	//glEnd();
 
 
 	SDL_GL_SwapWindow(window);
