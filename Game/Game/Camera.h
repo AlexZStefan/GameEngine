@@ -54,6 +54,22 @@ namespace GE {
 			updateCamMatrices();
 		}
 
+		void setAspectRatio(float newAratio) {
+			aspectRatio = newAratio;
+			updateCamMatrices();
+		}
+
+		void setNearClip(float newNearClip)
+		{
+			nearClip = newNearClip;
+			updateCamMatrices();
+		}
+
+		void setFarClip(float newFarClip)
+		{
+			farClip = newFarClip;
+			updateCamMatrices();
+		}
 
 	private:
 		glm::vec3 pos;

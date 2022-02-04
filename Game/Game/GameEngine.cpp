@@ -70,7 +70,8 @@ bool GE::GameEngine::init()
 
 	// init Camera
 	// Init Triangle Renderer
-
+	renderer = new Renderer();
+	renderer->init();
 
 	return true;
 }
@@ -98,7 +99,7 @@ int time()
 
 void GE::GameEngine::update()
 {
-	
+	renderer->update();
 
 }
 
@@ -106,6 +107,8 @@ void GE::GameEngine::draw()
 {
 	glClearColor(0.4f, 0.5f, 0.9, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	renderer->draw();
 
 
 	//glBegin(GL_POLYGON);
@@ -125,6 +128,9 @@ void GE::GameEngine::draw()
 
 void GE::GameEngine::exit()
 {
+	renderer->destroy();
+
+
 	SDL_DestroyWindow(window);
 
 	this->~GameEngine();

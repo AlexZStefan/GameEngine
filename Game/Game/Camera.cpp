@@ -14,3 +14,11 @@ GE::Camera::Camera(glm::vec3 cam_pos, glm::vec3 cam_target, glm::vec3 cam_upDir,
 
 }
 
+void GE::Camera::updateCamMatrices()
+{
+	viewMat = glm::lookAt(pos, target, camUp_dir);
+	projectionMat = glm::perspective(glm::radians(fovy), aspectRatio, nearClip, farClip);
+
+
+}
+

@@ -1,4 +1,7 @@
 #pragma once
+#include "Camera.h"
+#include "Renderer.h"
+
 #include <SDL.h>
 #include <glew.h>
 #include <SDL_opengl.h>
@@ -7,6 +10,7 @@
 #include <string>
 #include <wglew.h>
 #include <iostream>
+
 
 namespace GE {
 
@@ -26,6 +30,10 @@ namespace GE {
 		void set_window_title(const char*);
 
 	private:
+
+
+		Renderer* renderer; 
+
 		SDL_Window* window;
 
 		SDL_GLContext glContext;
