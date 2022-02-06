@@ -31,8 +31,8 @@ namespace GE {
 
 	private:
 
-
 		Renderer* renderer; 
+		Camera* main_cam; 
 
 		SDL_Window* window;
 

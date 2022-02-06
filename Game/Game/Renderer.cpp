@@ -9,6 +9,8 @@ namespace GE {
 
 	};
 
+
+
 	GLfloat vertexData[] = {
 		-1.f, .0f,
 		1.f, .0f,
@@ -31,13 +33,17 @@ namespace GE {
 
 			//delete[] Msg;
 			glDeleteShader(shaderId);
-			
+
 		}
 	}
 
-
 	Renderer::Renderer()
 	{
+		pos_x = pos_y = pos_z = 0.0f;
+		rot_x = rot_y = rot_z = 0.0f;
+		scale_x = 1.0f;
+		scale_y = 1.0f;
+		scale_z = 1.0f;
 
 	}
 
@@ -55,11 +61,19 @@ namespace GE {
 		const GLchar* V_ShaderCode[] = {
 			"#version 140\n"
 			"in vec2 vertexPos2D;\n"
+			"uniform mat4 transform;\n"
+			"uniform mat4 view;\n"
+			"uniform mat4 projection;\n"
 			"void main()\n"
 			"{\n"
+			"vec4 v = vec4(vertexPos2D.x, vertexPos2D.y, 0, 1);\n"
+			"v = projection * view * transform * v;\n"
 			"gl_Position = vec4(vertexPos2D.x, vertexPos2D.y, 0,1);\n"
+			//"gl_Position = v;\n"
 			"}\n"
 		};
+
+
 
 		// Copy the source to gl, ready for compilation
 		glShaderSource(vertexShader, 1, V_ShaderCode, NULL);
@@ -75,7 +89,7 @@ namespace GE {
 			displayShaderCompilerError(vertexShader);
 			return;
 		}
-	
+
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
 		const GLchar* F_ShaderCode[] = {
@@ -89,7 +103,7 @@ namespace GE {
 
 		glShaderSource(fragmentShader, 1, F_ShaderCode, NULL);
 		glCompileShader(fragmentShader);
-		 
+
 		GLint isShaderCompiledOK = GL_FALSE;
 
 		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isShaderCompiledOK);
@@ -124,9 +138,13 @@ namespace GE {
 		vertexPos2DLocation = glGetAttribLocation(programID, "vertexPos2D");
 
 		if (vertexPos2DLocation == -1) {
-			std::cerr << "Problem getting vertex2DPos" << std::endl;
+			std::cerr << "Problem getting vertexPos2D" << std::endl;
 		}
 
+		transformUniformId = glGetUniformLocation(programID, "transform");
+		projectionUniformId = glGetUniformLocation(programID, "projection");
+		viewUniformId = glGetUniformLocation(programID, "view");
+			
 		// create vertex buffer object
 		glGenBuffers(1, &vboTraiangle);
 		glBindBuffer(GL_ARRAY_BUFFER, vboTraiangle);
@@ -140,19 +158,49 @@ namespace GE {
 	{
 	}
 
-	void Renderer::draw()
+
+
+	
+	void Renderer::draw(Camera* cam)
 	{
+	
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+				
+		if(vertexData[0] <= 0) 
+			vertexData[0] += 0.01;
+		if (vertexData[5] >= -1)
+			vertexData[5] -= 0.01;
+		
+
+		glm::mat4 transformationMat = glm::mat4(1.0f);
+
+		transformationMat = glm::translate(transformationMat, glm::vec3(pos_x, pos_y, pos_z));
+		transformationMat = glm::rotate(transformationMat, glm::radians(rot_x), glm::vec3(1.0f, 0.0f, 0.0f));
+		transformationMat = glm::rotate(transformationMat, glm::radians(rot_y), glm::vec3(0.0f, 1.0f, 0.0f));
+		transformationMat = glm::rotate(transformationMat, glm::radians(rot_z), glm::vec3(0.0f, 0.0f, 1.0f));
+		transformationMat = glm::scale(transformationMat, glm::vec3(scale_x, scale_y, scale_z));
+
+		glm::mat4 viewMat = cam->getViewMatrix();
+		glm::mat4 projectionMat = cam->getProjectionMatrix();
+
 		glUseProgram(programID);
 
-		glVertexAttribPointer(vertexPos2DLocation, 2, GL_FLOAT, GL_FLOAT, sizeof(GLfloat) * 2, nullptr);
+		glBindBuffer(GL_ARRAY_BUFFER, vboTraiangle);
+
+		// functions transfer ram to graphics ram 
+		glUniformMatrix4fv(transformUniformId, 1, GL_FALSE, glm::value_ptr(transformationMat));
+		glUniformMatrix4fv(viewUniformId, 1, GL_FALSE, glm::value_ptr(viewMat));
+		glUniformMatrix4fv(projectionUniformId, 1, GL_FALSE, glm::value_ptr(projectionMat));
 
 		glEnableVertexAttribArray(vertexPos2DLocation);
 
-		glBindBuffer(GL_ARRAY_BUFFER, vboTraiangle);
+		glVertexAttribPointer(vertexPos2DLocation, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, nullptr);
 
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glDisableVertexAttribArray(vertexPos2DLocation);
+
+		//glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		glUseProgram(0);
 	}

@@ -18,8 +18,9 @@ namespace GE {
 		float getPosZ() { return pos.z; }
 
 		glm::vec3 getTarget() { return target; }
-		glm::vec3 getUpDir() { return camUp_dir; }
+		glm::vec3 getUpDir() { return up_vector; }
 		glm::mat4 getViewMatrix() { return viewMat; }
+		glm::mat4 getProjectionMatrix() { return projectionMat; }
 
 		void setPosX(float x) {
 			pos = glm::vec3(pos.x, pos.y, pos.z);
@@ -45,7 +46,7 @@ namespace GE {
 		}
 
 		void setUpDir(glm::vec3 newUp) {
-			camUp_dir = newUp;
+			up_vector = newUp;
 			updateCamMatrices();
 		}
 
@@ -74,12 +75,14 @@ namespace GE {
 	private:
 		glm::vec3 pos;
 		glm::vec3 target;
-		glm::vec3 camUp_dir;
+		glm::vec3 up_vector;
+
 		//glm::vec4 viewMat;
 		float fovy;
 		float aspectRatio;
 		float nearClip;
 		float farClip;
+
 		glm::mat4 viewMat;
 		glm::mat4 projectionMat;
 
