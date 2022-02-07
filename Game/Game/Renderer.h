@@ -4,12 +4,60 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 // take out if not req 
 #include <SDL.h>
 
-
 namespace GE {
+
+	struct ShaderSource {
+		std::string vertexSource;
+		std::string fragmentSource;
+	};
+
+	static ShaderSource ParseShader(const std::string& filepath)
+	{
+
+		enum class ShaderType
+		{
+			NONE = -1,
+			VERTEX = 0,
+			FRAGMENT = 1
+
+		};
+		ShaderType type = ShaderType::NONE;
+
+		// open file
+		std::ifstream stream(filepath);
+		std::stringstream ss[2];
+		
+
+		std::string line;
+		while (std::getline(stream, line)) {
+			// if line contains shader and not invalid set type to vertex
+	
+		
+			if (line.find("#shader") != std::string::npos)
+			{
+				if (line.find("vertex") != std::string::npos) {
+					type = ShaderType::VERTEX;
+				}
+				else if (line.find("fragment") != std::string::npos) {
+					type = ShaderType::FRAGMENT;
+				}
+			}
+			else {
+				// based on type - write lines that do not start with vertex or fragment;
+				ss[(int)type] << line << "\n";
+			}
+		}
+
+		// return string from the string stream
+		return { ss[0].str(), ss[1].str() };
+	}
 
 	//const GLchar* V_ShaderCode[] = {
 	//	"#version140\n"
@@ -61,7 +109,5 @@ namespace GE {
 		GLuint transformUniformId;
 		GLuint viewUniformId;
 		GLuint projectionUniformId;
-
-
 	};
 }

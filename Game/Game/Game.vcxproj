@@ -33,6 +33,9 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shaders.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Basic.shader" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

@@ -1,4 +1,8 @@
 #include "Renderer.h"
+#define ASSERT(x) if(!(x)) __debugbreak();
+#define GLCALL(x) GLClearError();\
+	x;\
+	ASSERT(GLLogCall())
 
 namespace GE {
 
@@ -6,16 +10,26 @@ namespace GE {
 		Vertex(-1.0f, .0f, .0f),
 		Vertex(1.0f, .0f, .0f),
 		Vertex(.0f, 1.0f, .0f),
-
 	};
-
-
 
 	GLfloat vertexData[] = {
 		-1.f, .0f,
 		1.f, .0f,
 		.0f, 1.f,
 	};
+
+	// clear errors
+	static void GLClearError() {
+		while (glGetError() != GL_NO_ERROR);
+	}
+	// show all errors
+	static bool GLLogCall() {
+		while (GLenum err = glGetError()) {
+			std::cerr << "OpenGl Error : " << err << std::endl;
+			return false;
+		}
+		return true;
+	}
 
 	void displayShaderCompilerError(GLuint shaderId) {
 		GLint MsgLen = 0;
@@ -25,7 +39,7 @@ namespace GE {
 		if (MsgLen > 1) {
 			//GLchar* Msg = new GLchar[MsgLen + 1];
 
-			GLchar* Msg = (GLchar*)alloca(MsgLen * sizeof(GLchar));
+			GLchar* Msg = (GLchar*)_malloca(MsgLen * sizeof(GLchar));
 
 			glGetShaderInfoLog(shaderId, MsgLen, NULL, Msg);
 
@@ -33,7 +47,6 @@ namespace GE {
 
 			//delete[] Msg;
 			glDeleteShader(shaderId);
-
 		}
 	}
 
@@ -44,9 +57,7 @@ namespace GE {
 		scale_x = 1.0f;
 		scale_y = 1.0f;
 		scale_z = 1.0f;
-
 	}
-
 
 	Renderer::~Renderer()
 	{
@@ -54,6 +65,9 @@ namespace GE {
 
 	void Renderer::init()
 	{
+		ShaderSource source =  ParseShader("Basic.shader");
+		std::cerr << source.vertexSource << std::endl;
+		std::cerr << source.fragmentSource<< std::endl;
 
 		// create vertex shader
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -73,16 +87,14 @@ namespace GE {
 			"}\n"
 		};
 
-
-
 		// Copy the source to gl, ready for compilation
 		glShaderSource(vertexShader, 1, V_ShaderCode, NULL);
 		// compile the code
-		glCompileShader(vertexShader);
+		GLCALL(glCompileShader(vertexShader));
 		// check for errors - presume shader did not compile
 		GLint isFShaderCompiledOK = GL_FALSE;
 		// get  compilation status from openGL
-		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isFShaderCompiledOK);
+		GLCALL(glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isFShaderCompiledOK));
 
 		if (isFShaderCompiledOK != GL_TRUE) {
 			std::cerr << "Unable to compile vertex shader" << std::endl;
@@ -101,12 +113,12 @@ namespace GE {
 			"}\n"
 		};
 
-		glShaderSource(fragmentShader, 1, F_ShaderCode, NULL);
-		glCompileShader(fragmentShader);
-
-		GLint isShaderCompiledOK = GL_FALSE;
-
-		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isShaderCompiledOK);
+		GLCALL(glShaderSource(fragmentShader, 1, F_ShaderCode, NULL));
+		GLCALL(glCompileShader(fragmentShader));
+		
+		GLCALL(GLint isShaderCompiledOK = GL_FALSE);
+		
+		GLCALL(glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isShaderCompiledOK));
 
 		if (isShaderCompiledOK != GL_TRUE) {
 			std::cerr << "Unable to compile the fragment shader" << std::endl;
@@ -115,22 +127,21 @@ namespace GE {
 			return;
 		}
 
-
 		// create program and store it`s ID 
 		programID = glCreateProgram();
 
 		// attach shader to program obj 
-		glAttachShader(programID, vertexShader);
-		glAttachShader(programID, fragmentShader);
+		GLCALL(glAttachShader(programID, vertexShader));
+		GLCALL(glAttachShader(programID, fragmentShader));
 
 		// link program to create executable program and use to render objects
 		// this will exists in graphics memory 
-		glLinkProgram(programID);
+		GLCALL(glLinkProgram(programID));
 
 		GLint isProgramLinked = GL_FALSE;
 
 		// shader error check 
-		glGetProgramiv(programID, GL_LINK_STATUS, &isProgramLinked);
+		GLCALL(glGetProgramiv(programID, GL_LINK_STATUS, &isProgramLinked));
 		if (isProgramLinked != GL_TRUE) {
 			std::cerr << "Failed to link program" << std::endl;
 		}
@@ -144,33 +155,28 @@ namespace GE {
 		transformUniformId = glGetUniformLocation(programID, "transform");
 		projectionUniformId = glGetUniformLocation(programID, "projection");
 		viewUniformId = glGetUniformLocation(programID, "view");
-			
+	
 		// create vertex buffer object
-		glGenBuffers(1, &vboTraiangle);
-		glBindBuffer(GL_ARRAY_BUFFER, vboTraiangle);
-
+		GLCALL(glGenBuffers(1, &vboTraiangle));
+		GLCALL(glBindBuffer(GL_ARRAY_BUFFER, vboTraiangle));
+		
 		// transfer vertecies to graphic memory 
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
-
+		GLCALL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW));
 	}
 
 	void Renderer::update()
 	{
 	}
-
-
-
 	
 	void Renderer::draw(Camera* cam)
 	{
 	
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+		GLCALL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW));
 				
 		if(vertexData[0] <= 0) 
 			vertexData[0] += 0.01;
 		if (vertexData[5] >= -1)
-			vertexData[5] -= 0.01;
-		
+			vertexData[5] -= 0.01;		
 
 		glm::mat4 transformationMat = glm::mat4(1.0f);
 
@@ -183,33 +189,34 @@ namespace GE {
 		glm::mat4 viewMat = cam->getViewMatrix();
 		glm::mat4 projectionMat = cam->getProjectionMatrix();
 
-		glUseProgram(programID);
-
-		glBindBuffer(GL_ARRAY_BUFFER, vboTraiangle);
-
+		GLCALL(glUseProgram(programID));
+		
+		GLCALL(glBindBuffer(GL_ARRAY_BUFFER, vboTraiangle));
+		
 		// functions transfer ram to graphics ram 
-		glUniformMatrix4fv(transformUniformId, 1, GL_FALSE, glm::value_ptr(transformationMat));
-		glUniformMatrix4fv(viewUniformId, 1, GL_FALSE, glm::value_ptr(viewMat));
-		glUniformMatrix4fv(projectionUniformId, 1, GL_FALSE, glm::value_ptr(projectionMat));
-
-		glEnableVertexAttribArray(vertexPos2DLocation);
-
-		glVertexAttribPointer(vertexPos2DLocation, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, nullptr);
+		GLCALL(glUniformMatrix4fv(transformUniformId, 1, GL_FALSE, glm::value_ptr(transformationMat)));
+		GLCALL(glUniformMatrix4fv(viewUniformId, 1, GL_FALSE, glm::value_ptr(viewMat)));
+		
+		GLCALL(glUniformMatrix4fv(projectionUniformId, 1, GL_FALSE, glm::value_ptr(projectionMat)));
+		
+		GLCALL(glEnableVertexAttribArray(vertexPos2DLocation));
+		
+		GLCALL(glVertexAttribPointer(vertexPos2DLocation, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2, nullptr));
 
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
-		glDisableVertexAttribArray(vertexPos2DLocation);
+		GLCALL(glDisableVertexAttribArray(vertexPos2DLocation));
 
 		//glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-		glUseProgram(0);
+		GLCALL(glUseProgram(0));
 	}
 
 	void Renderer::destroy()
 	{
 		// Release object allocated for program and vertex buffer obj 
-		glDeleteProgram(programID);
-		glDeleteBuffers(1, &vboTraiangle);
+		GLCALL(glDeleteProgram(programID));
+		GLCALL(glDeleteBuffers(1, &vboTraiangle));
 	}
 
 }
