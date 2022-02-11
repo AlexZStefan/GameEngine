@@ -1,5 +1,9 @@
 #pragma once
 #include "Camera.h"
+#include "Model.h"
+#include "Structs.h"
+#include "Texture.h"
+
 #include <glew.h>
 #include <iostream>
 #include <glm/glm.hpp>
@@ -7,12 +11,10 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-
 // take out if not req 
 #include <SDL.h>
 
 namespace GE {
-
 	struct ShaderSource {
 		std::string vertexSource;
 		std::string fragmentSource;
@@ -20,7 +22,6 @@ namespace GE {
 
 	static ShaderSource ParseShader(const std::string& filepath)
 	{
-
 		enum class ShaderType
 		{
 			NONE = -1,
@@ -72,17 +73,6 @@ namespace GE {
 	//	"}\n;"
 	//};
 
-	struct Vertex {
-
-		float x, y, z;
-
-		Vertex(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
-
-		Vertex() {
-			x = y = z = 0.0f;
-		}
-	};
-
 	class Renderer
 	{
 	public:
@@ -97,10 +87,13 @@ namespace GE {
 
 		void destroy();
 
+		void addObject();
+
 	private:
 		GLuint programID;
-		GLint vertexPos2DLocation;
+		GLint vertexPosLocation;
 		GLuint vboTraiangle;
+		GLint vertexUVLocation;
 
 		float pos_x, pos_y, pos_z;
 		float rot_x, rot_y, rot_z;
@@ -109,5 +102,15 @@ namespace GE {
 		GLuint transformUniformId;
 		GLuint viewUniformId;
 		GLuint projectionUniformId;
+		GLuint sampleId;
+
+		Model* model;
+		
+		std::unique_ptr<Texture> texture;
+		
+		// not yet 
+		std::vector <Model*> objects;
+
+
 	};
 }

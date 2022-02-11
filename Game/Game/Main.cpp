@@ -7,6 +7,8 @@
 
 using namespace GE;
 
+// macros defined in every headder file? 
+
 int main(int argc, char* argv[]) {
 
 	GameEngine gEngine = GameEngine(1);

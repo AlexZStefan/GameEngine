@@ -22,16 +22,22 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="FontRenderer.h" />
     <ClInclude Include="GameEngine.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shaders.h" />
+    <ClInclude Include="Structs.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="FontRenderer.cpp" />
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shaders.cpp" />
+    <ClCompile Include="Structs.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Basic.shader" />
@@ -91,8 +97,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)\Externals\glm;$(ProjectDir)\Externals\SDL\include;$(ProjectDir)\Externals\glew\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)\Externals\glew\lib\x86;$(ProjectDir)\Externals\SDL\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\Externals\glm;$(ProjectDir)\Externals\SDL\include;$(ProjectDir)\Externals\glew\include;$(ProjectDir)\Externals\assimp\include;$(ProjectDir)\Externals\SDL2_image\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\Externals\assimp\lib\x86;$(ProjectDir)\Externals\glew\lib\x86;$(ProjectDir)\Externals\SDL\lib\x86;$(ProjectDir)\Externals\SDL2_image\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -113,8 +119,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)\Externals\SDL\lib\x86;$(ProjectDir)\Externals\glew\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\Externals\assimp\lib\x86;$(ProjectDir)\Externals\SDL\lib\x86;$(ProjectDir)\Externals\glew\lib\x86;$(ProjectDir)\Externals\SDL2_image\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glew32.lib;assimp-vc140-mt.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

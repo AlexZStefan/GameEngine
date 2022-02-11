@@ -2,7 +2,6 @@
 
 namespace GE {
 
-
 	GE::GameEngine::GameEngine(int setVSync)
 	{
 		setVsync = setVSync;
@@ -62,11 +61,10 @@ namespace GE {
 			return false;
 		}
 
-
-		main_cam = new Camera(glm::vec3(.0f, .0f, 15.0f),
+		main_cam = new Camera(glm::vec3(.0f, .0f, 50.0f),
 			glm::vec3(.0f, .0f, .0f),
 			glm::vec3(.0f, 1.0f, .0f),
-			45.0f, windowHeight / windowWidth, 0.1f, 100.0f);
+			45.0f, windowWidth / windowHeight, 0.1f, 100.0f);
 
 		// init Camera
 		// Init Triangle Renderer
@@ -106,7 +104,9 @@ namespace GE {
 	void GE::GameEngine::draw()
 	{
 		glClearColor(0.4f, 0.5f, 0.9, 1.f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		// set depth and culling 
+		glEnable(GL_DEPTH_TEST);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		renderer->draw(main_cam);
 
