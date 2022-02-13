@@ -1,8 +1,11 @@
 #pragma once
+#include "Structs.h"
 #include <glew.h>
 #include <SDL.h>
 #include <glm/glm.hpp>
 #include <vector>
+#include <iostream>
+
 
 namespace GE {
 

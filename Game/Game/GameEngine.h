@@ -14,10 +14,6 @@
 
 namespace GE {
 
-	int windowHeight = 960;
-	int windowWidth = 1280;
-
-
 	class GameEngine {
 	public:
 		SDL_Surface* screen;
@@ -26,6 +22,11 @@ namespace GE {
 		GameEngine(const GameEngine&);
 
 		virtual ~GameEngine();
+
+
+		int windowHeight = 960;
+		int windowWidth = 1280;
+
 
 		bool init();
 		bool keep_running();

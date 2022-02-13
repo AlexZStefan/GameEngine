@@ -1,7 +1,5 @@
 #include "Functions.h"
-#include <iostream>
-#include "Structs.h"
-#include <vector>
+
 
 namespace GE
 {
