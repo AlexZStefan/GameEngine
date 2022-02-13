@@ -11,7 +11,7 @@ namespace GE {
 	public:
 		Camera(glm::vec3 cam_pos, glm::vec3 cam_target, glm::vec3 cam_upDir, float fov, float ar, float near, float far);
 
-		~Camera();
+		~Camera() {};
 
 		float getPosX() { return pos.x; }
 		float getPosY() { return pos.y; }
@@ -23,13 +23,14 @@ namespace GE {
 		glm::mat4 getProjectionMatrix() { return projectionMat; }
 
 		void setPosX(float x) {
-			pos = glm::vec3(pos.x, pos.y, pos.z);
+			pos = glm::vec3(x, pos.y, pos.z);
 			updateCamMatrices();
 		}
 		void setPosY(float y) {
 			pos = glm::vec3(pos.x, y, pos.z);
 			updateCamMatrices();
 		}
+
 		void setPosZ(float z) {
 			pos = glm::vec3(pos.x, pos.y, z);
 			updateCamMatrices();

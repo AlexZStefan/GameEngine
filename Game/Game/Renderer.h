@@ -3,6 +3,7 @@
 #include "Model.h"
 #include "Structs.h"
 #include "Texture.h"
+#include "Functions.h"
 
 #include <glew.h>
 #include <iostream>
@@ -104,7 +105,7 @@ namespace GE {
 		GLuint projectionUniformId;
 		GLuint sampleId;
 
-		Model* model;
+		std::unique_ptr<Model> model;
 		
 		std::unique_ptr<Texture> texture;
 		

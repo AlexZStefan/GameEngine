@@ -1,6 +1,7 @@
 #pragma once
 #include "Camera.h"
 #include "Renderer.h"
+#include "InputSystem.h"
 
 #include <SDL.h>
 #include <glew.h>
@@ -11,14 +12,19 @@
 #include <wglew.h>
 #include <iostream>
 
-
 namespace GE {
+
+	int windowHeight = 960;
+	int windowWidth = 1280;
+
 
 	class GameEngine {
 	public:
 		SDL_Surface* screen;
 		// -1 addaptive Sync, 1 for updated sync with vertical retrace, 0 for immediate updates
 		GameEngine(int setVSync);
+		GameEngine(const GameEngine&);
+
 		virtual ~GameEngine();
 
 		bool init();
@@ -31,16 +37,16 @@ namespace GE {
 
 	private:
 
-		Renderer* renderer; 
-		Camera* main_cam; 
+		std::unique_ptr<Renderer> renderer;
+		Camera* main_cam ;
+		std::unique_ptr<InputSystem> controlls ;
 
+		SDL_Event input_event;
 		SDL_Window* window;
 
 		SDL_GLContext glContext;
 
-		int windowHeight = 960;
-		int windowWidth = 1280;
-
+		
 		int tick;
 
 		int setVsync;

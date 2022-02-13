@@ -2,11 +2,13 @@
 
 namespace GE {
 
+
+	
 	GE::GameEngine::GameEngine(int setVSync)
 	{
 		setVsync = setVSync;
 	}
-
+		
 	GE::GameEngine::~GameEngine()
 	{
 	}
@@ -65,11 +67,14 @@ namespace GE {
 			glm::vec3(.0f, .0f, .0f),
 			glm::vec3(.0f, 1.0f, .0f),
 			45.0f, windowWidth / windowHeight, 0.1f, 100.0f);
+			
 
 		// init Camera
 		// Init Triangle Renderer
-		renderer = new Renderer();
+		renderer = std::make_unique<Renderer>();
 		renderer->init();
+
+		controlls = std::make_unique<InputSystem>(&input_event, main_cam);
 
 		std::cout << "SDL Init successful " << std::endl;
 		return true;
@@ -78,13 +83,13 @@ namespace GE {
 	bool GE::GameEngine::keep_running()
 	{
 		SDL_PumpEvents();
-
-		SDL_Event evt;
-
-		if (SDL_PeepEvents(&evt, 1, SDL_GETEVENT, SDL_QUIT, SDL_QUIT))
+		
+		if (SDL_PeepEvents(&input_event, 1, SDL_GETEVENT, SDL_QUIT, SDL_QUIT))
 		{
 			return false;
 		}
+
+		controlls->movement();
 
 		return true;
 	}

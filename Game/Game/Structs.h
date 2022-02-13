@@ -16,6 +16,23 @@ namespace GE {
 		}
 	};
 
+	struct Vector3 {
+		float x, y, z;
+
+		Vector3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
+
+		Vector3 Multiply(const Vector3& other) const
+		{
+			return *this * other;
+		}
+
+		Vector3 operator *(const Vector3& other) const
+		{
+			return Vector3(x * other.x, y * other.y, z * other.z);
+		}
+
+	};
+
 	struct VertexRGBA {
 
 		float x, y, z;

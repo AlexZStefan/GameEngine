@@ -5,6 +5,7 @@
 	ASSERT(GLLogCall())
 
 namespace GE {
+
 	VertexRGBA triangleVertecies[] = {
 		VertexRGBA(-.50f, .0f, .0f, 1.0f, 1.0f, 1.0f, 1.0f),
 		VertexRGBA(.50f, .0f, .0f, 1.0f, 0.0f, 0.0f, 0.0f),
@@ -66,12 +67,11 @@ namespace GE {
 		projectionUniformId = 0;
 		sampleId = 0;
 
-
-		model = new Model();
+		model = std::make_unique<Model>();
 		
 		bool result = model->loadFromFile("./resources/assets/models/ship.obj", true);
 		
-		texture = std::unique_ptr<Texture>(new Texture("./resources/assets/models/ship_uv.jpg"));
+		texture = std::make_unique<Texture>("./resources/assets/models/ship_uv.jpg");
 		
 		model->setMaterial(texture->getTexture());
 		
@@ -212,6 +212,9 @@ namespace GE {
 
 		glm::mat4 viewMat = cam->getViewMatrix();
 		glm::mat4 projectionMat = cam->getProjectionMatrix();
+
+		//drawLine(glm::vec3(0, 0, 0), glm::vec3(100, 0, 0));
+
 
 		// functions transfer ram to graphics ram 
 		GLCALL(glUniformMatrix4fv(transformUniformId, 1, GL_FALSE, glm::value_ptr(transformationMat)));

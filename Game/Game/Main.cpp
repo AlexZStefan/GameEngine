@@ -4,13 +4,17 @@
 #include "SDL.h"   
 #include <stdio.h>
 #include <memory>
-
+#include "Functions.h"
 using namespace GE;
 
 // macros defined in every headder file? 
+// global variables 
+// camera unique pointer delete issue & sdl_window
+// why is gEngine made on a stack and not on * ? is it a singleton? made copy constr otherwise it would say "trying to access deleted function. 
 
 int main(int argc, char* argv[]) {
 
+	
 	GameEngine gEngine = GameEngine(1);
 
 	if (!gEngine.init()) {
