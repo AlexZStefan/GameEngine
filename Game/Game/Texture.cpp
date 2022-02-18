@@ -13,11 +13,13 @@ namespace GE {
 	Texture::~Texture()
 	{
 		// delete all textures 
-	}
+	}	
+
 	void Texture::addTextures()
 	{
-	
+		
 	}
+
 	void Texture::loadTexture(std::string filename)
 	{
 		SDL_Surface* surfaceImage = IMG_Load(filename.c_str());
@@ -55,6 +57,7 @@ namespace GE {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+		glBindTexture(GL_TEXTURE_2D, 0);
 		SDL_FreeSurface(surfaceImage);
 
 		return;

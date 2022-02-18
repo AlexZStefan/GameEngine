@@ -15,7 +15,6 @@ namespace GE {
 
 	bool GE::Model::loadFromFile(const char* filename, bool flipUV)
 	{
-		std::vector<Vertex> loadedVertices;
 		// create object importer
 		Assimp::Importer imp;
 		const aiScene* pScene = nullptr;
@@ -42,19 +41,35 @@ namespace GE {
 
 					const aiVector3D uv = mesh->mTextureCoords[0][face.mIndices[vertIdx]];
 
-					loadedVertices.push_back(Vertex(pos->x, pos->y, pos->z, uv.x, uv.y));
+					vertices.push_back(Vertex(pos->x, pos->y, pos->z, uv.x, uv.y));
 				}
 			}
 		}
 
-		numVertices = loadedVertices.size();
+		numVertices = vertices.size();
 
 		GLCALL(glGenBuffers(1, &vbo));
 
-		GLCALL(glBindBuffer(GL_ARRAY_BUFFER, vbo));
-
-		GLCALL(glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof(Vertex), loadedVertices.data(), GL_STATIC_DRAW));
-
 		return true;
 	}
+	 void Model::bindVBO()
+	{
+		 GLCALL(glBindBuffer(GL_ARRAY_BUFFER, vbo));
+
+		 GLCALL(glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW));
+
+	}
+
+
+	 void Model::unbindVBO()
+	 {
+		 glBindBuffer(GL_ARRAY_BUFFER, 0);
+	 }
+	 void Model::bindTexture(Texture* modelText)
+	 {
+
+	 }
+	 void Model::unbindTexture()
+	 {
+	 }
 }

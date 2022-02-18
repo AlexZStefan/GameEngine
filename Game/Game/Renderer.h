@@ -4,6 +4,7 @@
 #include "Structs.h"
 #include "Texture.h"
 #include "Functions.h"
+#include "TerrainGenerator.h"
 
 #include <glew.h>
 #include <iostream>
@@ -108,6 +109,8 @@ namespace GE {
 		std::unique_ptr<Model> model;
 		
 		std::unique_ptr<Texture> texture;
+		Texture* text2;
+		std::unique_ptr<TerrainGenerator> terrain;
 		
 		// not yet 
 		std::vector <Model*> objects;

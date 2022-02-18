@@ -23,10 +23,8 @@ namespace GE {
 
 		virtual ~GameEngine();
 
-
 		int windowHeight = 960;
 		int windowWidth = 1280;
-
 
 		bool init();
 		bool keep_running();
@@ -46,7 +44,6 @@ namespace GE {
 		SDL_Window* window;
 
 		SDL_GLContext glContext;
-
 		
 		int tick;
 

@@ -58,10 +58,27 @@ namespace GE {
 			material = mat;
 		}
 
-	private:
+		 virtual void bindVBO();
+		 virtual void unbindVBO();
+
+		 virtual void bindIDO() {};
+		 virtual void unbindIDO() {};
+
+		 virtual void bindTexture(Texture* modelTexture);
+		 virtual void unbindTexture();
+
+
+
+
+	protected:
 		GLuint vbo;
+		GLuint ibo;
 		int numVertices;
 		GLuint material;
+
+		std::vector<Vertex> vertices;
+		std::vector<GLuint> indices;
+		//std::unique_ptr<Texture> texture; 
 
 	};
 

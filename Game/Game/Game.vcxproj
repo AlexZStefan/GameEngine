@@ -28,6 +28,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shaders.h" />
     <ClInclude Include="Structs.h" />
+    <ClInclude Include="TerrainGenerator.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +42,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shaders.cpp" />
     <ClCompile Include="Structs.cpp" />
+    <ClCompile Include="TerrainGenerator.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>

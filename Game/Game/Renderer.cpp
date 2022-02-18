@@ -72,13 +72,15 @@ namespace GE {
 		bool result = model->loadFromFile("./resources/assets/models/ship.obj", true);
 		
 		texture = std::make_unique<Texture>("./resources/assets/models/ship_uv.jpg");
-		
+		text2 = new Texture("./resources/assets/textures/terrain-texture.png");
+
 		model->setMaterial(texture->getTexture());
-		
 
 		if (!result) {
 			std::cerr << "failed to load model" << std::endl;
 		}
+		
+		terrain = std::make_unique<TerrainGenerator>("./resources/assets/textures/hmap.jpg",1,1);
 	}
 
 	Renderer::~Renderer()
@@ -179,20 +181,17 @@ namespace GE {
 		projectionUniformId = glGetUniformLocation(programID, "projection");
 		viewUniformId = glGetUniformLocation(programID, "view");
 		sampleId = glGetUniformLocation(programID, "sampler");
-
-		GLCALL(glVertexAttribPointer(vertexPosLocation, 3,
-			GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, x)));
-		
-		GLCALL(glVertexAttribPointer(vertexUVLocation, 2,
-			GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, u)));
 	}
 
 	void Renderer::update()
 	{
 	}   
 
+	int asdas = 100;
+
 	void Renderer::draw(Camera* cam)
 	{
+		asdas--; 
 		// gets disabled at end of F()
 		// stops renderign faces not visible to the camera
 		glEnable(GL_CULL_FACE);
@@ -215,7 +214,6 @@ namespace GE {
 
 		//drawLine(glm::vec3(0, 0, 0), glm::vec3(100, 0, 0));
 
-
 		// functions transfer ram to graphics ram 
 		GLCALL(glUniformMatrix4fv(transformUniformId, 1, GL_FALSE, glm::value_ptr(transformationMat)));
 		GLCALL(glUniformMatrix4fv(viewUniformId, 1, GL_FALSE, glm::value_ptr(viewMat)));
@@ -224,13 +222,42 @@ namespace GE {
 		// select texture
 		glActiveTexture(GL_TEXTURE0);
 		glUniform1i(sampleId, 0);
+		glBindTexture(GL_TEXTURE_2D, text2->getTexture());
+
+		terrain->bindIbo();
+
+		GLCALL(glVertexAttribPointer(vertexPosLocation, 3,
+			GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, x)));
+
+		GLCALL(glVertexAttribPointer(vertexUVLocation, 2,
+			GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, u)));
+
+		GLCALL(glDrawElements(GL_TRIANGLES, terrain->indexCount, GL_UNSIGNED_INT, nullptr));
+		terrain->unbindIbo();
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		// select texture
+		glActiveTexture(GL_TEXTURE0);
+		glUniform1i(sampleId, 0);
 		glBindTexture(GL_TEXTURE_2D, texture->getTexture());
 
+		if (asdas > 1)
+		{
+		model->bindVBO();
+		GLCALL(glVertexAttribPointer(vertexPosLocation, 3,
+			GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, x)));
+
+		GLCALL(glVertexAttribPointer(vertexUVLocation, 2,
+			GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, u)));
+		
 		GLCALL(glDrawArrays(GL_TRIANGLES, 0, model->getNumVertices()));
+		model->unbindVBO();
+		glBindTexture(GL_TEXTURE_2D, 0);
+		}
 
 		GLCALL(glDisableVertexAttribArray(vertexPosLocation));
 		GLCALL(glDisableVertexAttribArray(vertexUVLocation));
-		//GLCALL(glUseProgram(0));
+		GLCALL(glUseProgram(0));
 
 		glDisable(GL_CULL_FACE);
 	}

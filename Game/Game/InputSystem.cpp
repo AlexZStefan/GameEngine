@@ -41,6 +41,9 @@ namespace GE {
 				case SDLK_d:
 					camera->setPosX(camera->getPosX() + 1);
 					break;
+				case SDLK_SPACE:
+					camera->setPosY(camera->getPosY() + 1);
+					break;
 				case SDL_WINDOW_MOUSE_CAPTURE:
 					std::cerr << "ASD MOUYSE" << std::endl;
  				default:
