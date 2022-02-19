@@ -1,8 +1,4 @@
 #include "Renderer.h"
-#define ASSERT(xer) if(!(xer)) __debugbreak();
-#define GLCALL(xer) GLClearError();\
-	xer;\
-	ASSERT(GLLogCall())
 
 namespace GE {
 
@@ -17,19 +13,6 @@ namespace GE {
 		1.f, .0f, .0f,
 		.0f, 1.f, .0f
 	};
-
-	// clear errors
-	static void GLClearError() {
-		while (glGetError() != GL_NO_ERROR);
-	}
-	// show all errors
-	static bool GLLogCall() {
-		while (GLenum err = glGetError()) {
-			std::cerr << "OpenGl Error : " << err << std::endl;
-			return false;
-		}
-		return true;
-	}
 
 	void displayShaderCompilerError(GLuint shaderId) {
 		GLint MsgLen = 0;

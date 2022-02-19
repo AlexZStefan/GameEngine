@@ -3,6 +3,23 @@
 
 namespace GE
 {
+
+
+
+	// clear errors
+	 void GLClearError() {
+		while (glGetError() != GL_NO_ERROR);
+	}
+	// show all errors
+	bool GLLogCall() {
+		while (GLenum err = glGetError()) {
+			std::cerr << "OpenGl Error : " << err << std::endl;
+			return false;
+		}
+		return true;
+	}
+
+
 	/*Vector3 startPos = Vector3(12, 23, 42);
 	Vector3 endPos = Vector3(2, 2, 2);*/
 	

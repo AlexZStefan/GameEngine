@@ -6,8 +6,16 @@
 #include <vector>
 #include <iostream>
 
+#define ASSERT(xer) if(!(xer)) __debugbreak();
+#define GLCALL(xer) GLClearError();\
+	xer;\
+	ASSERT(GLLogCall())
+
 
 namespace GE {
+
+	void GLClearError();
+	bool GLLogCall();
 
 	class DrawLine
 	{
