@@ -20,6 +20,7 @@
 static void GLClearError() {
 	while (glGetError() != GL_NO_ERROR);
 }
+
 // show all errors
 static bool GLLogCall() {
 	while (GLenum err = glGetError()) {
@@ -28,8 +29,6 @@ static bool GLLogCall() {
 	}
 	return true;
 }
-
-
 
 namespace GE {
 
@@ -46,7 +45,7 @@ namespace GE {
 			return vbo;
 		}
 
-		int getNumVertices() {
+		unsigned int getNumVertices() {
 			return numVertices;
 		}
 
@@ -58,28 +57,26 @@ namespace GE {
 			material = mat;
 		}
 
+		virtual void setAttribute(GLint position, int posSize, GLint uv, int uvSize);
+
 		 virtual void bindVBO();
 		 virtual void unbindVBO();
 
-		 virtual void bindIDO() {};
-		 virtual void unbindIDO() {};
+		 virtual void bindIBO();
+		 virtual void unbindIBO();
 
-		 virtual void bindTexture(Texture* modelTexture);
+		 virtual void bindTexture(GLuint sample);
 		 virtual void unbindTexture();
-
-
-
 
 	protected:
 		GLuint vbo;
 		GLuint ibo;
-		int numVertices;
+		unsigned int numVertices;
 		GLuint material;
 
 		std::vector<Vertex> vertices;
 		std::vector<GLuint> indices;
 		//std::unique_ptr<Texture> texture; 
-
 	};
 
 }

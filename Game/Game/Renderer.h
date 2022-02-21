@@ -5,6 +5,8 @@
 #include "Texture.h"
 #include "Functions.h"
 #include "TerrainGenerator.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
 #include <glew.h>
 #include <iostream>
@@ -115,6 +117,7 @@ namespace GE {
 		// not yet 
 		std::vector <Model*> objects;
 
-
+		VertexBuffer* vb;
+		IndexBuffer* ibo;
 	};
 }

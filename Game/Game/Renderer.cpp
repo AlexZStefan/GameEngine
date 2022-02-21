@@ -64,6 +64,8 @@ namespace GE {
 		}
 		
 		terrain = std::make_unique<TerrainGenerator>("./resources/assets/textures/hmap.jpg",1,1);
+
+		//vb = new VertexBuffer( model->getNumVertices() * sizeof(Vertex), model->vertices.data() );
 	}
 
 	Renderer::~Renderer()
@@ -219,23 +221,25 @@ namespace GE {
 		terrain->unbindIbo();
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		// select texture
-		glActiveTexture(GL_TEXTURE0);
-		glUniform1i(sampleId, 0);
-		glBindTexture(GL_TEXTURE_2D, texture->getTexture());
+		/*{
+			terrain->bindTexture(sampleId);
+			terrain->bindVBO();
+			terrain->bindIBO();
+			terrain->setAttribute(vertexPosLocation, 3, vertexUVLocation, 2);
+			GLCALL(glDrawElements(GL_TRIANGLES, terrain->indexCount, GL_UNSIGNED_INT, nullptr));
+			terrain->unbindIbo();
+			terrain->unbindTexture();
+		}*/
 
 		if (asdas > 1)
 		{
-		model->bindVBO();
-		GLCALL(glVertexAttribPointer(vertexPosLocation, 3,
-			GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, x)));
-
-		GLCALL(glVertexAttribPointer(vertexUVLocation, 2,
-			GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, u)));
+			model->bindTexture(sampleId);
+			model->bindVBO();
+			model->setAttribute(vertexPosLocation, 3, vertexUVLocation, 2);	
+			GLCALL(glDrawArrays(GL_TRIANGLES, 0, model->getNumVertices()));
+			model->unbindVBO();
+			model->unbindTexture();
 		
-		GLCALL(glDrawArrays(GL_TRIANGLES, 0, model->getNumVertices()));
-		model->unbindVBO();
-		glBindTexture(GL_TEXTURE_2D, 0);
 		}
 
 		GLCALL(glDisableVertexAttribArray(vertexPosLocation));
@@ -250,6 +254,7 @@ namespace GE {
 		// Release object allocated for program and vertex buffer obj 
 		GLCALL(glDeleteProgram(programID));
 		GLCALL(glDeleteBuffers(1, &vboTraiangle));
-	}
 
+		delete text2;
+	}
 }

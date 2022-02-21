@@ -6,7 +6,7 @@ namespace GE {
 	class VertexBuffer
 	{
 	public:
-		VertexBuffer(const void* data, GLuint size);
+		VertexBuffer(GLuint size, const void* data);
 		~VertexBuffer();
 
 		void bind() const;

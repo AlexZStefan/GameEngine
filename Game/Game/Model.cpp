@@ -49,27 +49,52 @@ namespace GE {
 		numVertices = vertices.size();
 
 		GLCALL(glGenBuffers(1, &vbo));
-
+		GLCALL(glGenBuffers(1, &ibo));
 		return true;
 	}
-	 void Model::bindVBO()
+
+	void Model::setAttribute(GLint position, int posSize, GLint uvLocation, int uvSize)
+	{
+		GLCALL(glVertexAttribPointer(position, posSize,
+			GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, x)));
+
+		GLCALL(glVertexAttribPointer(uvLocation, uvSize,
+			GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, u)));
+	}
+
+	void Model::bindVBO()
 	{
 		 GLCALL(glBindBuffer(GL_ARRAY_BUFFER, vbo));
 
 		 GLCALL(glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW));
-
 	}
-
 
 	 void Model::unbindVBO()
 	 {
 		 glBindBuffer(GL_ARRAY_BUFFER, 0);
 	 }
-	 void Model::bindTexture(Texture* modelText)
-	 {
 
+	 void Model::bindIBO()
+	 {
+		 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+		 glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 	 }
+
+	 void Model::unbindIBO()
+	 {
+		 glBindBuffer(GL_ARRAY_BUFFER, 0);
+		 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	 }
+
+	 void Model::bindTexture(GLuint sample)
+	 {
+		 glActiveTexture(GL_TEXTURE0);
+		 glUniform1i(sample, 0);
+		 glBindTexture(GL_TEXTURE_2D, material);
+	 }
+
 	 void Model::unbindTexture()
 	 {
+		 glBindTexture(GL_TEXTURE_2D, 0);
 	 }
 }
