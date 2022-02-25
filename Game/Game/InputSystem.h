@@ -12,13 +12,16 @@ namespace GE {
 		InputSystem(SDL_Event* evnt, Camera *cam);
 
 		~InputSystem();
-
+		
 		void movement();
 		
 	private:
 		SDL_Event* event; 
 		Model* model;
 		Camera* camera; 
+
+		float camSpeed = 0.2f;
+		float mouseSensitivity = 0.1f;
 	};
 
 }

@@ -7,6 +7,7 @@ namespace GE {
 	GE::GameEngine::GameEngine(int setVSync)
 	{
 		setVsync = setVSync;
+		
 	}
 		
 	GE::GameEngine::~GameEngine()
@@ -29,7 +30,8 @@ namespace GE {
 		// no legacy features for backword compatibility
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-		window = SDL_CreateWindow("ZarEngine", 50, 50, windowWidth, windowHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+		// SDL_WINDOW_INPUT_GRABBED - DISABLE IF LINUX COMPATIBILITY ISSUES 
+		window = SDL_CreateWindow("ZarEngine", 50, 50, windowWidth, windowHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
 
 		if (window == nullptr) {
 			std::cerr << "Unable to create window." << SDL_GetError() << std::endl;

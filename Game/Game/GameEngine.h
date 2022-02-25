@@ -38,7 +38,6 @@ namespace GE {
 	private:
 
 		bool initModels();
-
 		std::unique_ptr<Renderer> playerRenderer;
 		std::unique_ptr<Renderer> terrainRenderer;
 		//std::unique_ptr<Renderer> skyRenderer;
