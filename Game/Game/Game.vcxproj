@@ -26,8 +26,11 @@
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="ObjectLoader.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shaders.h" />
+    <ClInclude Include="ShaderUtils.h" />
+    <ClInclude Include="SkyboxRenderer.h" />
     <ClInclude Include="Structs.h" />
     <ClInclude Include="TerrainGenerator.h" />
     <ClInclude Include="Texture.h" />
@@ -40,11 +43,13 @@
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="InputSystem.cpp" />
-    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Main.h" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ObjectLoader.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shaders.cpp" />
-    <ClCompile Include="Structs.cpp" />
+    <ClCompile Include="ShaderUtils.cpp" />
+    <ClCompile Include="SkyboxRenderer.cpp" />
     <ClCompile Include="TerrainGenerator.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />

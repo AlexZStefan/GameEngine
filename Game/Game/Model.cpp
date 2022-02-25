@@ -6,6 +6,7 @@ namespace GE {
 	{
 		vbo = 0;
 		numVertices = 0;
+		indexCount = 0;
 	}
 
 	GE::Model::~Model()
@@ -47,6 +48,30 @@ namespace GE {
 		}
 
 		numVertices = vertices.size();
+		indexCount = indices.size();
+
+		GLCALL(glGenBuffers(1, &vbo));
+		GLCALL(glGenBuffers(1, &ibo));
+		return true;
+	}
+
+	bool Model::loadModel(std::vector<Vertex> _model, std::vector<int> _indices)
+	{
+		std::vector<Vertex>::iterator it;
+		std::vector<int>::iterator iit = _indices.begin();
+		for (it = _model.begin(); it < _model.end(); it++)
+		{
+
+			vertices.push_back(*it); 
+
+			
+			if (iit != _indices.end())
+			{
+				indices.push_back(*iit); 
+				std::advance(iit, +1);
+			}
+		}
+		numVertices = vertices.size();
 
 		GLCALL(glGenBuffers(1, &vbo));
 		GLCALL(glGenBuffers(1, &ibo));
@@ -55,6 +80,8 @@ namespace GE {
 
 	void Model::setAttribute(GLint position, int posSize, GLint uvLocation, int uvSize)
 	{
+		glEnableVertexAttribArray(position);
+
 		GLCALL(glVertexAttribPointer(position, posSize,
 			GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, x)));
 
@@ -76,13 +103,13 @@ namespace GE {
 
 	 void Model::bindIBO()
 	 {
+		 glEnableVertexAttribArray(0);
 		 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 		 glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 	 }
 
 	 void Model::unbindIBO()
 	 {
-		 glBindBuffer(GL_ARRAY_BUFFER, 0);
 		 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	 }
 

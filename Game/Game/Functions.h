@@ -16,6 +16,7 @@ namespace GE {
 
 	void GLClearError();
 	bool GLLogCall();
+	void displayShaderCompilerError(GLuint shaderId);
 
 	class DrawLine
 	{

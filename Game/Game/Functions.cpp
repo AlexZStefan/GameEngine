@@ -1,11 +1,7 @@
 #include "Functions.h"
 
-
 namespace GE
 {
-
-
-
 	// clear errors
 	 void GLClearError() {
 		while (glGetError() != GL_NO_ERROR);
@@ -13,12 +9,42 @@ namespace GE
 	// show all errors
 	bool GLLogCall() {
 		while (GLenum err = glGetError()) {
-			std::cerr << "OpenGl Error : " << err << std::endl;
+
+			std::string error;
+			switch (err)
+			{
+			case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
+			case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
+			case GL_INVALID_OPERATION:             error = "INVALID_OPERATION"; break;
+			case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
+			case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
+			case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
+			case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
+			}
+			std::cerr << "OpenGl Error : " << error <<" " << err << std::endl;
 			return false;
 		}
 		return true;
 	}
 
+	void displayShaderCompilerError(GLuint shaderId) {
+		GLint MsgLen = 0;
+
+		glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &MsgLen);
+
+		if (MsgLen > 1) {
+			//GLchar* Msg = new GLchar[MsgLen + 1];
+
+			GLchar* Msg = (GLchar*)_malloca(MsgLen * sizeof(GLchar));
+
+			glGetShaderInfoLog(shaderId, MsgLen, NULL, Msg);
+
+			std::cerr << "Error compiling shader\n" << Msg << std::endl;
+
+			//delete[] Msg;
+			glDeleteShader(shaderId);
+		}
+	}
 
 	/*Vector3 startPos = Vector3(12, 23, 42);
 	Vector3 endPos = Vector3(2, 2, 2);*/

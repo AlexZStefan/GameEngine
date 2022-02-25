@@ -7,6 +7,7 @@
 #include "TerrainGenerator.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "ShaderUtils.h"
 
 #include <glew.h>
 #include <iostream>
@@ -64,23 +65,11 @@ namespace GE {
 		return { ss[0].str(), ss[1].str() };
 	}
 
-	//const GLchar* V_ShaderCode[] = {
-	//	"#version140\n"
-	//	"in vec3 vertexPos3D;\n"
-	//	"uniform mat4 transform;\n"
-	//	"uniform mat4 view;\n"
-	//	"uniform mat4 projection;\n"
-	//	"void main(){\n"
-	//	"vec4 v = vec4(vertexPos3D.xyz, 1);\n"
-	//	"v= projection * view * transform & v;\n"
-	//	"gl_Position = v;"
-	//	"}\n;"
-	//};
 
 	class Renderer
 	{
 	public:
-		Renderer();
+		Renderer(std::shared_ptr<Model> _model);
 		virtual ~Renderer();
 
 		void init();
@@ -107,16 +96,8 @@ namespace GE {
 		GLuint viewUniformId;
 		GLuint projectionUniformId;
 		GLuint sampleId;
-
-		std::unique_ptr<Model> model;
 		
-		std::unique_ptr<Texture> texture;
-		Texture* text2;
-		std::unique_ptr<TerrainGenerator> terrain;
-		
-		// not yet 
-		std::vector <Model*> objects;
-
+		std::shared_ptr<Model> model;
 		VertexBuffer* vb;
 		IndexBuffer* ibo;
 	};

@@ -60,7 +60,7 @@ namespace GE {
 		glGenBuffers(1, &ibo);
 
 		indexCount = indices.size();
-
+		numVertices = vertices.size();
 		SDL_FreeSurface(heightMap);
 	}
 
@@ -70,9 +70,6 @@ namespace GE {
 
 	void TerrainGenerator::bindIbo()
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
-		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 	}

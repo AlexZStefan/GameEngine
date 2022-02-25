@@ -13,7 +13,6 @@ namespace GE {
 		TerrainGenerator(const std::string hMap, float widthS, float heightS);
 
 		~TerrainGenerator();
-		GLuint indexCount;
 
 		void bindIbo();
 		void unbindIbo();

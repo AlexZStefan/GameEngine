@@ -39,7 +39,7 @@ namespace GE {
 		Uint32 format;
 		GLuint textureName;
 
-		SDL_Texture* texture;
+	
 		std::vector<std::map<std::string, SDL_Texture*>> textures; 
 	};
 }

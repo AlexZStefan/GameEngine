@@ -13,6 +13,7 @@ namespace GE {
 	Texture::~Texture()
 	{
 		// delete all textures 
+		glDeleteTextures(1, &textureName);
 	}	
 
 	void Texture::addTextures()
@@ -56,6 +57,9 @@ namespace GE {
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		// clamp x & y of the texture
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 		SDL_FreeSurface(surfaceImage);

@@ -63,20 +63,55 @@ namespace GE {
 			return false;
 		}
 
+		// Load up models
+		initModels();
+		
 		main_cam = new Camera(glm::vec3(.0f, .0f, 50.0f),
 			glm::vec3(.0f, .0f, .0f),
 			glm::vec3(.0f, 1.0f, .0f),
 			45.0f, windowWidth / windowHeight, 0.1f, 100.0f);
-			
-
-		// init Camera
-		// Init Triangle Renderer
-		renderer = std::make_unique<Renderer>();
-		renderer->init();
 
 		controlls = std::make_unique<InputSystem>(&input_event, main_cam);
 
 		std::cout << "SDL Init successful " << std::endl;
+
+		playerRenderer = std::make_unique<Renderer>(playerModel);
+		//playerRenderer->init();
+		terrainRenderer = std::make_unique<Renderer>(terrain);
+		//std::shared_ptr<Model> newSky = std::make_shared<Model>();
+		//sky = new SkyboxRenderer();
+		//bool loaded = newSky->loadModel(sky->getVertices(), sky->getIndices());
+		//skyRenderer = std::make_unique<Renderer>(newSky);
+		//terrainRenderer->init();
+
+		return true;
+	}
+
+	bool GE::GameEngine::initModels() {
+	
+		playerModel = std::make_shared<Model>();
+		bool result = playerModel->loadFromFile("./resources/assets/models/ship.obj", true);
+
+		if (!result) {
+			std::cerr << "failed to load model" << std::endl;
+		}
+
+		playerTexture = std::make_unique<Texture>("./resources/assets/models/ship_uv.jpg");
+		playerModel->setMaterial(playerTexture->getTexture());
+	
+
+		terrainTexture = std::make_unique<Texture>("./resources/assets/textures/terrain-texture.png");
+
+		terrain = std::make_shared<TerrainGenerator>("./resources/assets/textures/hmap.jpg", 1, 1);
+		terrain->setMaterial(terrainTexture->getTexture());
+
+		skyBoxRenderer = std::make_unique<SkyboxRenderer>(
+			"./resources/assets/textures/front.jpg",
+			"./resources/assets/textures/back.jpg",
+			"./resources/assets/textures/right.jpg",
+			"./resources/assets/textures/left.jpg",
+			"./resources/assets/textures/top.jpg",
+			"./resources/assets/textures/bottom.jpg");
 		return true;
 	}
 
@@ -103,7 +138,7 @@ namespace GE {
 
 	void GE::GameEngine::update()
 	{
-		renderer->update();
+		playerRenderer->update();
 	}
 
 	void GE::GameEngine::draw()
@@ -113,7 +148,10 @@ namespace GE {
 		glEnable(GL_DEPTH_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		renderer->draw(main_cam);
+		//sky->draw(main_cam);
+		playerRenderer->draw(main_cam);
+		terrainRenderer->draw(main_cam);
+		//skyBoxRenderer->draw(main_cam);
 
 		//glBegin(GL_POLYGON);
 		//glColor3f(1.f, 1.f, 0.f);
@@ -130,7 +168,7 @@ namespace GE {
 
 	void GE::GameEngine::exit()
 	{
-		renderer->destroy();
+		playerRenderer->destroy();
 
 		SDL_DestroyWindow(window);
 

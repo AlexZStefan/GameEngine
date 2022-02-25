@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Renderer.h"
 #include "InputSystem.h"
+#include "SkyboxRenderer.h"
 
 #include <SDL.h>
 #include <glew.h>
@@ -36,7 +37,11 @@ namespace GE {
 
 	private:
 
-		std::unique_ptr<Renderer> renderer;
+		bool initModels();
+
+		std::unique_ptr<Renderer> playerRenderer;
+		std::unique_ptr<Renderer> terrainRenderer;
+		//std::unique_ptr<Renderer> skyRenderer;
 		Camera* main_cam ;
 		std::unique_ptr<InputSystem> controlls ;
 
@@ -49,6 +54,13 @@ namespace GE {
 
 		int setVsync;
 
+		std::shared_ptr<Model>playerModel;
+		std::shared_ptr<TerrainGenerator> terrain;
+
+		std::unique_ptr<Texture> playerTexture;
+		std::unique_ptr<Texture> terrainTexture;
+
+		std::unique_ptr<SkyboxRenderer> skyBoxRenderer;
 	};
 
 	int time();

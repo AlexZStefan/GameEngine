@@ -4,7 +4,7 @@
 #include "SDL.h"   
 #include <stdio.h>
 #include <memory>
-#include "Functions.h"
+
 using namespace GE;
 
 // macros defined in every headder file? 

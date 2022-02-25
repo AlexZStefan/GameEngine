@@ -36,10 +36,10 @@ namespace GE {
 	{
 	public:
 		Model();
-
 		~Model();
 
 		bool loadFromFile(const char* filename, bool flipUV);
+		bool loadModel(std::vector<Vertex> _model, std::vector<int> _indices);
 
 		GLuint getVerts() {
 			return vbo;
@@ -57,6 +57,9 @@ namespace GE {
 			material = mat;
 		}
 
+		GLuint &getIndices() { return ibo; };
+		unsigned int getIndicesCount() { return indexCount; };
+
 		virtual void setAttribute(GLint position, int posSize, GLint uv, int uvSize);
 
 		 virtual void bindVBO();
@@ -72,11 +75,11 @@ namespace GE {
 		GLuint vbo;
 		GLuint ibo;
 		unsigned int numVertices;
+		unsigned int indexCount;
 		GLuint material;
 
 		std::vector<Vertex> vertices;
 		std::vector<GLuint> indices;
 		//std::unique_ptr<Texture> texture; 
 	};
-
 }
