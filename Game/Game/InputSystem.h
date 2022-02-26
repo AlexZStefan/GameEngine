@@ -13,7 +13,7 @@ namespace GE {
 
 		~InputSystem();
 		
-		void movement();
+		void movement(SDL_Window* window);
 		
 	private:
 		SDL_Event* event; 
@@ -21,7 +21,7 @@ namespace GE {
 		Camera* camera; 
 
 		float camSpeed = 0.2f;
-		float mouseSensitivity = 0.1f;
+		float mouseSensitivity = 0.25f;
 	};
 
 }

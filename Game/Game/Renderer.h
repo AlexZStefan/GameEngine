@@ -82,6 +82,61 @@ namespace GE {
 
 		void addObject();
 
+		float getPosX() {
+			return pos_x;
+		}
+
+		float getPosY() {
+			return pos_y;
+		}
+
+		float getPosZ() {
+			return pos_z;
+		}
+
+		float getRotX() {
+			return rot_x;
+		}
+
+		float getRotY() {
+			return rot_y;
+
+		}
+
+		float getRotZ() {
+			return rot_z;
+		}
+
+		float getScaleX() {
+			return scale_x;
+		}
+
+		float getScaleY() {
+			return scale_y;
+		}
+
+		float getScaleZ() {
+			return scale_z;
+		}
+
+		void setPos(float _x, float _y, float _z) {
+			pos_x = _x;
+			pos_y = _y;
+			pos_z = _z;
+		}
+
+		void setScale(float _x, float _y, float _z) {
+			scale_x = _x;
+			scale_y = _y;
+			scale_z = _z;
+		}
+
+		void setRotation(float _x, float _y, float _z) {
+			rot_x = _x;
+			rot_y = _y;
+			rot_z = _z;
+		}
+
 	private:
 		GLuint programID;
 		GLint vertexPosLocation;

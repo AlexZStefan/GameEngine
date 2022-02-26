@@ -40,7 +40,7 @@ namespace GE {
 		bool initModels();
 		std::unique_ptr<Renderer> playerRenderer;
 		std::unique_ptr<Renderer> terrainRenderer;
-		//std::unique_ptr<Renderer> skyRenderer;
+		std::unique_ptr<Renderer> sTempleRenderer;
 		Camera* main_cam ;
 		std::unique_ptr<InputSystem> controlls ;
 
@@ -53,10 +53,12 @@ namespace GE {
 
 		int setVsync;
 
-		std::shared_ptr<Model>playerModel;
+		std::shared_ptr<Model> playerModel;
+		std::shared_ptr<Model> sacrificeTemple;
 		std::shared_ptr<TerrainGenerator> terrain;
 
 		std::unique_ptr<Texture> playerTexture;
+		std::unique_ptr<Texture> sTempleTexture;
 		std::unique_ptr<Texture> terrainTexture;
 
 		std::unique_ptr<SkyboxRenderer> skyBoxRenderer;
@@ -66,4 +68,3 @@ namespace GE {
 
 	void display_info_message(const char* msg);
 }
-

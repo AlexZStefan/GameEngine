@@ -1,13 +1,10 @@
 #include "GameEngine.h"
 
 namespace GE {
-
-
 	
 	GE::GameEngine::GameEngine(int setVSync)
 	{
 		setVsync = setVSync;
-		
 	}
 		
 	GE::GameEngine::~GameEngine()
@@ -30,7 +27,7 @@ namespace GE {
 		// no legacy features for backword compatibility
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-		// SDL_WINDOW_INPUT_GRABBED - DISABLE IF LINUX COMPATIBILITY ISSUES 
+		// SDL_WINDOW_INPUT_GRABBED - DISABLE IF LINUX COMPATIBILITY ISSUES // |		SDL_WINDOW_INPUT_GRABBED
 		window = SDL_CreateWindow("ZarEngine", 50, 50, windowWidth, windowHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
 
 		if (window == nullptr) {
@@ -80,6 +77,11 @@ namespace GE {
 		playerRenderer = std::make_unique<Renderer>(playerModel);
 		//playerRenderer->init();
 		terrainRenderer = std::make_unique<Renderer>(terrain);
+		sTempleRenderer = std::make_unique<Renderer>(sacrificeTemple);
+		//bTempleRenderer = std::make_unique<Renderer>(bigTemple);
+		sTempleRenderer->setScale(0.2f, 0.2f, 0.2f);
+		sTempleRenderer->setPos(50.f, 1.f, 25.f);
+		//bigTemplebTempleRenderer
 		//std::shared_ptr<Model> newSky = std::make_shared<Model>();
 		//sky = new SkyboxRenderer();
 		//bool loaded = newSky->loadModel(sky->getVertices(), sky->getIndices());
@@ -90,7 +92,12 @@ namespace GE {
 	}
 
 	bool GE::GameEngine::initModels() {
-	
+		sacrificeTemple = std::make_shared<Model>();
+		sacrificeTemple->loadFromFile("./resources/assets/models/sacrifice_temple.obj", true);
+
+		sTempleTexture = std::make_unique<Texture>("./resources/assets/models/ship_uv.jpg");
+		sacrificeTemple->setMaterial(sTempleTexture->getTexture());
+
 		playerModel = std::make_shared<Model>();
 		bool result = playerModel->loadFromFile("./resources/assets/models/ship.obj", true);
 
@@ -100,7 +107,6 @@ namespace GE {
 
 		playerTexture = std::make_unique<Texture>("./resources/assets/models/ship_uv.jpg");
 		playerModel->setMaterial(playerTexture->getTexture());
-	
 
 		terrainTexture = std::make_unique<Texture>("./resources/assets/textures/terrain-texture.png");
 
@@ -126,7 +132,7 @@ namespace GE {
 			return false;
 		}
 
-		controlls->movement();
+		controlls->movement(window);
 
 		return true;
 	}
@@ -150,10 +156,11 @@ namespace GE {
 		glEnable(GL_DEPTH_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//sky->draw(main_cam);
+		skyBoxRenderer->draw(main_cam);
+		
 		playerRenderer->draw(main_cam);
 		terrainRenderer->draw(main_cam);
-		//skyBoxRenderer->draw(main_cam);
+		//sTempleRenderer->draw(main_cam);
 
 		//glBegin(GL_POLYGON);
 		//glColor3f(1.f, 1.f, 0.f);

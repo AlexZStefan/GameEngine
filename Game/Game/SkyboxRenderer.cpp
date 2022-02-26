@@ -147,15 +147,16 @@ void GE::SkyboxRenderer::draw(Camera* cam)
 
 	glm::mat4 camView = cam->getViewMatrix();
 	glm::mat4 projection = cam->getProjectionMatrix();
+	glm::mat4 transform = glm::mat4(1.0f);
 
 	camView[3][0] = 0.0f;
 	camView[3][1] = 0.0f;
 	camView[3][2] = 0.0f;
 
+	bind();
 	GLCALL(glUniformMatrix4fv(viewUniformId, 1, GL_FALSE, glm::value_ptr(camView)));
 	GLCALL(glUniformMatrix4fv(projectionUniformId, 1, GL_FALSE, glm::value_ptr(projection)));
-	
-	bind();
+	GLCALL(glUniformMatrix4fv(transformUniformId, 1, GL_FALSE, glm::value_ptr(transform)));
 
 	setAttribute();
 
@@ -182,6 +183,8 @@ void GE::SkyboxRenderer::setAttribute()
 
 void GE::SkyboxRenderer::bind()
 {
+	GLCALL(glUseProgram(skyboxprogramId));
+
 	//std::cout << sizeof(cube) << " sizeof vert" << sizeof(cube)/ sizeof(CubeVertex) << std::endl;
 	GLCALL(glBindBuffer(GL_ARRAY_BUFFER, vboSkybox));
 	GLCALL(glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW));

@@ -86,7 +86,7 @@ namespace GE {
 		};
 
 		void setOldMouseX(float newOldMouseX) {
-			newOldMouseX = newOldMouseX;
+			oldMouseX = newOldMouseX;
 		};
 
 		void setOldMouseY(float newOldMouseY) {
