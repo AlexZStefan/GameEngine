@@ -4,17 +4,8 @@ namespace GE {
 	
 	// Billboard quad.  Quad is a square so use scale
 	// to get correct dimensions.  Is on 0,0,0
-	Vertex billboard[] = {
-		Vertex(0.5f, 1.0f, 0.0f, 1.0f, 1.0f),
-		Vertex(-0.5f, 1.0f, 0.0f, 0.0f, 1.0f),
-		Vertex(-0.5f, 0.0f, 0.0f, 0.0f, 0.0f),
-
-		Vertex(-0.5f, 0.0f, 0.0f, 0.0f, 0.0f),
-		Vertex(0.5f, 0.0f, 0.0f, 1.0f, 0.0f),
-		Vertex(0.5f, 1.0f, 0.0f, 1.0f, 1.0f)
-	};
-
-	BillboardRenderer::BillboardRenderer()
+	
+	BillboardRenderer::BillboardRenderer(Billboard * billboard)
 	{
 		// New! Load shader source from files.  Need the new ShaderUtils files
 		std::string v_shader_source = loadShaderSourceCode("billboard.vert");
@@ -33,10 +24,10 @@ namespace GE {
 
 		// Now get a link to the vertexPos3D so we can link the attribute
 		// to our vertices when rendering
-		vertexLocation = glGetAttribLocation(programId, "vertexPos3D");
+		vertexPosLocation = glGetAttribLocation(programId, "vertexPos");
 
 		// Check for errors
-		if (vertexLocation == -1) {
+		if (vertexPosLocation == -1) {
 			std::cerr << "Problem getting vertex3DPos" << std::endl;
 		}
 
@@ -53,10 +44,6 @@ namespace GE {
 		viewUniformId = glGetUniformLocation(programId, "view");
 		projectionUniformId = glGetUniformLocation(programId, "projection");
 		samplerId = glGetUniformLocation(programId, "sampler");
-
-		// Create the vertex buffer for the quad
-		glGenBuffers(1, &vboQuad);
-		glBindBuffer(GL_ARRAY_BUFFER, vboQuad);
 
 		// Transfer vertices to graphics memory
 		glBufferData(GL_ARRAY_BUFFER, sizeof(billboard), billboard, GL_STATIC_DRAW);
@@ -78,66 +65,8 @@ namespace GE {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		glm::vec3 rotation = glm::vec3(0, 0, 0);
-
-		// Calculate the transformation matrix for the object.  Start with the identity matrix
-		glm::mat4 transformationMat = glm::mat4(1.0f);
+		Renderer::draw(cam);
 		
-		// Position in world
-		transformationMat = glm::translate(transformationMat, glm::vec3(billboard->getX(), billboard->getY(), billboard->getZ()));
-		transformationMat = glm::translate(transformationMat, glm::vec3(25.0f, 0.0f, 25.0f));
-
-		// Rotation with respect to the camera
-		transformationMat = glm::rotate(transformationMat, 
-			glm::radians(360.0f - cam->getYaw()-90.0f), 
-			glm::vec3(0.0f, 1.0f, 0.0f));
-
-
-		// Scale, only need x and y
-		transformationMat = glm::scale(transformationMat, glm::vec3(billboard->getScaleX(), billboard->getScaleY(), 0.0f));
-
-		// Render object in the same way as a regular model
-		// Get the view and projection matrices
-		glm::mat4 viewMat = cam->getViewMatrix();
-		glm::mat4 projectionMat = cam->getProjectionMatrix();
-
-		// Select the program into the rendering context
-		glUseProgram(programId);
-
-		// Set the uniforms in the shader
-		glUniformMatrix4fv(transformUniformId, 1, GL_FALSE, glm::value_ptr(transformationMat));
-		glUniformMatrix4fv(viewUniformId, 1, GL_FALSE, glm::value_ptr(viewMat));
-		glUniformMatrix4fv(projectionUniformId, 1, GL_FALSE, glm::value_ptr(projectionMat));
-
-		// Enable the attribute to be passed vertices from the vertex buffer object
-		glEnableVertexAttribArray(vertexLocation);
-		// Select the vertex buffer object into the context
-		glBindBuffer(GL_ARRAY_BUFFER, vboQuad);
-
-		// Define the structure of a vertex for OpenGL to select values from vertex buffer
-		// and store in vertexPos2DLocation attribute
-		glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, x));
-
-		// Enable the attribute to be passed vertices from the vertex buffer object
-		glEnableVertexAttribArray(vertexUVLocation);
-		// Define where the vertex specification will find the colour data and how much
-		// Colour data is four float values, located at where the r member is.  Stride is a vertex apart
-		glVertexAttribPointer(vertexUVLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, u));
-
-		glActiveTexture(GL_TEXTURE0);
-		glUniform1i(samplerId, 0);
-		glBindTexture(GL_TEXTURE_2D, billboard->getTexture()->getTexture());
-
-		// Draw the model
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-
-		// Unselect the attribute from the context
-		glDisableVertexAttribArray(vertexLocation);
-		glDisableVertexAttribArray(vertexUVLocation);
-
-		// Unselect the program from the context
-		glUseProgram(0);
-
 		glDisable(GL_BLEND);
 		glDisable(GL_CULL_FACE);
 	}

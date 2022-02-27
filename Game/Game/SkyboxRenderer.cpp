@@ -127,9 +127,9 @@ void GE::SkyboxRenderer::createSkyboxProgram()
 		return;
 	}
 
-	vertexLocation = glGetAttribLocation(skyboxprogramId, "vertexPos");
+	vertexPosLocation = glGetAttribLocation(skyboxprogramId, "vertexPos");
 
-	if (vertexLocation == -1) {
+	if (vertexPosLocation == -1) {
 		std::cerr << "Problem getting vertexPosition" << std::endl;
 	}
 
@@ -166,7 +166,7 @@ void GE::SkyboxRenderer::draw(Camera* cam)
 
 	glDrawArrays(GL_TRIANGLES, 0, sizeof(cube) / sizeof(skyboxCubeMap));
 
-	GLCALL(glDisableVertexAttribArray(vertexLocation));
+	GLCALL(glDisableVertexAttribArray(vertexPosLocation));
 
 	release();
 
@@ -176,9 +176,9 @@ void GE::SkyboxRenderer::draw(Camera* cam)
 }
 void GE::SkyboxRenderer::setAttribute()
 {
-	GLCALL(glEnableVertexAttribArray(vertexLocation));
+	GLCALL(glEnableVertexAttribArray(vertexPosLocation));
 
-	GLCALL(glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(CubeVertex), (void*)offsetof(CubeVertex, x)));
+	GLCALL(glVertexAttribPointer(vertexPosLocation, 3, GL_FLOAT, GL_FALSE, sizeof(CubeVertex), (void*)offsetof(CubeVertex, x)));
 }
 
 void GE::SkyboxRenderer::bind()
@@ -192,7 +192,7 @@ void GE::SkyboxRenderer::bind()
 
 void GE::SkyboxRenderer::release()
 {
-	GLCALL(glDisableVertexAttribArray(vertexLocation));
+	GLCALL(glDisableVertexAttribArray(vertexPosLocation));
 	GLCALL(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
 	GLCALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	GLCALL(glUseProgram(0));

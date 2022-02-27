@@ -1,79 +1,39 @@
 #pragma once
-#include "Texture.h"
+#include "Renderer.h"
 
 namespace GE {
 
-	class Billboard
+	
+
+	class Billboard : public Model
 	{
 	public:
-		Billboard(Texture* _t) {
-			m_texture = _t;
-			pos_x = pos_y = pos_z = 0.0f;
-			scale_x = scale_y = scale_z = 10.0f;
-		}
+		Billboard() : Model() {
+			
+		};
+		~Billboard() {};
 
-		~Billboard() {
-			delete m_texture;
-		}
 
-		float getX() {
-			return pos_x;
-		}
 
-		float getY() {
-			return pos_y;
-		}
 
-		float getZ() {
-			return pos_z;
-		}
+		void createBillboard() {
+			Vertex billboardStruct[6] = {
+			Vertex(0.5f, 1.0f, 0.0f, 1.0f, 1.0f),
+			Vertex(-0.5f, 1.0f, 0.0f, 0.0f, 1.0f),
+			Vertex(-0.5f, 0.0f, 0.0f, 0.0f, 0.0f),
 
-		float setX(float _x) {
-			pos_x = _x;
-		}
+			Vertex(-0.5f, 0.0f, 0.0f, 0.0f, 0.0f),
+			Vertex(0.5f, 0.0f, 0.0f, 1.0f, 0.0f),
+			Vertex(0.5f, 1.0f, 0.0f, 1.0f, 1.0f)
+			};
+			
+			for (auto e : billboardStruct) vertices.push_back(e);
 
-		float setY(float _y) {
-			pos_y= _y;
-		}
-
-		float setZ(float _z) {
-			pos_z = _z;
-		}
-
-		float getScaleX() {
-			return scale_x;
-		}
-
-		float getScaleY() {
-			return scale_y;
-		}
-
-		float getScaleZ() {
-			return scale_z;
-		}
-
-		float setScaleX(float _x) {
-			scale_x = _x;
-		}
-
-		float setScaleY(float _y) {
-			scale_y = _y;
-		}
-
-		float setScaleZ(float _z) {
-			scale_z = _z;
-		}
-
-		Texture* getTexture() {
-			return m_texture;
+			numVertices = vertices.size();
+			indexCount = indices.size();
 		}
 
 	private:
-		Texture* m_texture;
-		float pos_x, pos_y, pos_z;
-		float scale_x, scale_y, scale_z;
-
-
 	};
 
 }
