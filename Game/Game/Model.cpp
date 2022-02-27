@@ -7,11 +7,15 @@ namespace GE {
 		vbo = 0;
 		numVertices = 0;
 		indexCount = 0;
+
+		GLCALL(glGenBuffers(1, &vbo));
+		GLCALL(glGenBuffers(1, &ibo));
 	}
 
 	GE::Model::~Model()
 	{
 		GLCALL(glDeleteBuffers(1, &vbo));
+		GLCALL(glDeleteBuffers(1, &ibo));
 	}
 
 	bool GE::Model::loadFromFile(const char* filename, bool flipUV)
@@ -50,8 +54,6 @@ namespace GE {
 		numVertices = vertices.size();
 		indexCount = indices.size();
 
-		GLCALL(glGenBuffers(1, &vbo));
-		GLCALL(glGenBuffers(1, &ibo));
 		return true;
 	}
 

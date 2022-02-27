@@ -22,14 +22,14 @@ namespace GE {
 		scale_y = 1.0f;
 		scale_z = 1.0f;
 
-		programID = 0;
+		programId = 0;
 		vertexPosLocation = 0;
 		vertexUVLocation = 0;
 
 		transformUniformId = 0;
 		viewUniformId = 0;
 		projectionUniformId = 0;
-		sampleId = 0;
+		samplerId = 0;
 
 		init();
 	}
@@ -40,41 +40,16 @@ namespace GE {
 
 	void Renderer::init()
 	{
-		/*ShaderSource source = ParseShader("Basic.shader");
-		std::cerr << source.vertexSource << std::endl;
-		std::cerr << source.fragmentSource << std::endl;*/
+		std::string v_shader_source = loadShaderSourceCode("basic_vshader.vert");
+		std::string f_shader_source = loadShaderSourceCode("basic_fshader.frag");
 
-		const GLchar* V_ShaderCode[] = {
-			"#version 140\n"
-			"in vec3 vertexPos;\n"
-			"in vec2 vi_UV;\n"
-			"out vec2 vo_UV;\n"
-			"uniform mat4 transform;\n"
-			"uniform mat4 view;\n"
-			"uniform mat4 projection;\n"
-			"void main()\n"
-			"{\n"
-			"vo_UV = vi_UV;\n"
-			"vec4 v = vec4(vertexPos.xyz, 1);\n"
-			"v = projection * view * transform * v;\n"
-			//"gl_Position = vec4(vertexPos.x, vertexPos.y, 0,1);\n"
-			"gl_Position = v;\n"
-			"}\n"
-		};
+		// Due to the unique way OpenGL handles shader source, OpenGL expects
+		// an array of strings.  In this case, create an array of the
+		// loaded source code strings and pass to compileProgram for compilation
+		const GLchar* v_source_array[] = { v_shader_source.c_str() };
+		const GLchar* f_source_array[] = { f_shader_source.c_str() };
 
-		// have to adjust if it`s only rgb text 
-		const GLchar* F_ShaderCode[] = {
-			"#version 140\n"
-			"in vec2 vo_UV;"
-			"uniform sampler2D sampler;\n"
-			"out vec4 fragmentColour;\n"
-			"void main()\n"
-			"{\n"
-			"fragmentColour = texture(sampler, vo_UV).rgba;\n"
-			"}\n"
-		};
-
-		bool result = compileProgram(V_ShaderCode, F_ShaderCode, &programID);
+		bool result = compileProgram(v_source_array, f_source_array, &programId);
 
 		if (!result) {
 			std::cerr << "Failed to create skybox program " << std::endl;
@@ -82,21 +57,20 @@ namespace GE {
 			return;
 		}
 
-
-		vertexPosLocation = glGetAttribLocation(programID, "vertexPos");
+		vertexPosLocation = glGetAttribLocation(programId, "vertexPos");
 		if (vertexPosLocation == -1) {
 			std::cerr << "Problem getting vertexPos" << std::endl;
 		}
 
-		vertexUVLocation = glGetAttribLocation(programID, "vi_UV");
+		vertexUVLocation = glGetAttribLocation(programId, "vi_UV");
 		if (vertexUVLocation == -1) {
 			std::cerr << "Problem getting vertex UV" << std::endl;
 		}
 
-		transformUniformId = glGetUniformLocation(programID, "transform");
-		projectionUniformId = glGetUniformLocation(programID, "projection");
-		viewUniformId = glGetUniformLocation(programID, "view");
-		sampleId = glGetUniformLocation(programID, "sampler");
+		transformUniformId = glGetUniformLocation(programId, "transform");
+		projectionUniformId = glGetUniformLocation(programId, "projection");
+		viewUniformId = glGetUniformLocation(programId, "view");
+		samplerId = glGetUniformLocation(programId, "sampler");
 	}
 
 	void Renderer::update()
@@ -109,7 +83,7 @@ namespace GE {
 		// stops renderign faces not visible to the camera
 		glEnable(GL_CULL_FACE);
 
-		GLCALL(glUseProgram(programID));	
+		GLCALL(glUseProgram(programId));	
 
 		GLCALL(glEnableVertexAttribArray(vertexPosLocation));
 		GLCALL(glEnableVertexAttribArray(vertexUVLocation));
@@ -130,7 +104,7 @@ namespace GE {
 		GLCALL(glUniformMatrix4fv(viewUniformId, 1, GL_FALSE, glm::value_ptr(viewMat)));
 		GLCALL(glUniformMatrix4fv(projectionUniformId, 1, GL_FALSE, glm::value_ptr(projectionMat)));
 
-			model->bindTexture(sampleId);
+			model->bindTexture(samplerId);
 			model->bindVBO();
 			if (model->getIndicesCount() > 0)
 			{
@@ -158,7 +132,7 @@ namespace GE {
 	void Renderer::destroy()
 	{
 		// Release object allocated for program and vertex buffer obj 
-		GLCALL(glDeleteProgram(programID));
+		GLCALL(glDeleteProgram(programId));
 		GLCALL(glDeleteBuffers(1, &vboTraiangle));
 	}
 }

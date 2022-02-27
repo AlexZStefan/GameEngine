@@ -120,6 +120,12 @@ namespace GE {
 			"./resources/assets/textures/left.jpg",
 			"./resources/assets/textures/top.jpg",
 			"./resources/assets/textures/bottom.jpg");
+	
+		
+		billTexture = new Texture("./resources/assets/textures/hmap.jpg");
+		billb = new Billboard(billTexture);
+		bRenderer = new BillboardRenderer(billb);
+		
 		return true;
 	}
 

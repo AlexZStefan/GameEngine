@@ -20,55 +20,57 @@
 #include <SDL.h>
 
 namespace GE {
-	struct ShaderSource {
-		std::string vertexSource;
-		std::string fragmentSource;
-	};
+	//struct ShaderSource {
+	//	std::string vertexSource;
+	//	std::string fragmentSource;
+	//};
 
-	static ShaderSource ParseShader(const std::string& filepath)
-	{
-		enum class ShaderType
-		{
-			NONE = -1,
-			VERTEX = 0,
-			FRAGMENT = 1
+	//static ShaderSource ParseShader(const std::string& filepath)
+	//{
+	//	enum class ShaderType
+	//	{
+	//		NONE = -1,
+	//		VERTEX = 0,
+	//		FRAGMENT = 1
 
-		};
-		ShaderType type = ShaderType::NONE;
+	//	};
+	//	ShaderType type = ShaderType::NONE;
 
-		// open file
-		std::ifstream stream(filepath);
-		std::stringstream ss[2];
-		
+	//	// open file
+	//	std::ifstream stream(filepath);
+	//	std::stringstream ss[2];
+	//	
 
-		std::string line;
-		while (std::getline(stream, line)) {
-			// if line contains shader and not invalid set type to vertex
-	
-		
-			if (line.find("#shader") != std::string::npos)
-			{
-				if (line.find("vertex") != std::string::npos) {
-					type = ShaderType::VERTEX;
-				}
-				else if (line.find("fragment") != std::string::npos) {
-					type = ShaderType::FRAGMENT;
-				}
-			}
-			else {
-				// based on type - write lines that do not start with vertex or fragment;
-				ss[(int)type] << line << "\n";
-			}
-		}
+	//	std::string line;
+	//	while (std::getline(stream, line)) {
+	//		// if line contains shader and not invalid set type to vertex
+	//
+	//	
+	//		if (line.find("#shader") != std::string::npos)
+	//		{
+	//			if (line.find("vertex") != std::string::npos) {
+	//				type = ShaderType::VERTEX;
+	//			}
+	//			else if (line.find("fragment") != std::string::npos) {
+	//				type = ShaderType::FRAGMENT;
+	//			}
+	//		}
+	//		else {
+	//			// based on type - write lines that do not start with vertex or fragment;
+	//			ss[(int)type] << line << "\n";
+	//		}
+	//	}
 
-		// return string from the string stream
-		return { ss[0].str(), ss[1].str() };
-	}
+	//	// return string from the string stream
+	//	return { ss[0].str(), ss[1].str() };
+	//}
 
 
 	class Renderer
 	{
 	public:
+		Renderer() {};
+
 		Renderer(std::shared_ptr<Model> _model);
 		virtual ~Renderer();
 
@@ -79,8 +81,6 @@ namespace GE {
 		void draw(Camera* cam);
 
 		void destroy();
-
-		void addObject();
 
 		float getPosX() {
 			return pos_x;
@@ -137,8 +137,8 @@ namespace GE {
 			rot_z = _z;
 		}
 
-	private:
-		GLuint programID;
+	protected:
+		GLuint programId;
 		GLint vertexPosLocation;
 		GLuint vboTraiangle;
 		GLint vertexUVLocation;
@@ -150,7 +150,7 @@ namespace GE {
 		GLuint transformUniformId;
 		GLuint viewUniformId;
 		GLuint projectionUniformId;
-		GLuint sampleId;
+		GLuint samplerId;
 		
 		std::shared_ptr<Model> model;
 		VertexBuffer* vb;

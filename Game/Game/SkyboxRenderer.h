@@ -108,7 +108,7 @@ private:
 	GLuint skyboxCubeMap;
 	
 	GLuint skyboxprogramId;
-	GLint vertexLocation;
+	GLint vertexPosLocation;
 	GLuint vboSkybox;
 
 

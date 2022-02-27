@@ -1,6 +1,6 @@
 #pragma once
 #include "Camera.h"
-#include "Renderer.h"
+#include "BillboardRenderer.h"
 #include "InputSystem.h"
 #include "SkyboxRenderer.h"
 
@@ -62,6 +62,10 @@ namespace GE {
 		std::unique_ptr<Texture> terrainTexture;
 
 		std::unique_ptr<SkyboxRenderer> skyBoxRenderer;
+		Texture* billTexture;
+		Billboard* billb;
+
+
 	};
 
 	int time();

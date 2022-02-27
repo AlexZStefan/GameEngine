@@ -1,7 +1,7 @@
 #version 140
 
 // Inputs to vertex shader
-in vec3 vertexPos3D;
+in vec3 vertexPos;
 in vec2 vUV;
 
 // Output
@@ -15,7 +15,7 @@ uniform mat4 projection;
 // Shader main code
 void main() {
 	// Convert input vertex to 4D 
-	vec4 v = vec4(vertexPos3D.xyz, 1);
+	vec4 v = vec4(vertexPos.xyz, 1);
 
 	// Transform
 	v = projection * view * transform * v;

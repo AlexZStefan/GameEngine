@@ -2,6 +2,7 @@
 
 #include "Structs.h"
 #include "Texture.h"
+#include "Functions.h"
 
 #include <glew.h>
 #include <vector>
@@ -10,25 +11,6 @@
 #include <assimp/postprocess.h>
 #include <iostream>
 #include <glew.h>
-
-#define ASSERT(xer) if(!(xer)) __debugbreak();
-#define GLCALL(xer) GLClearError();\
-	xer;\
-	ASSERT(GLLogCall())
-
-// clear errors
-static void GLClearError() {
-	while (glGetError() != GL_NO_ERROR);
-}
-
-// show all errors
-static bool GLLogCall() {
-	while (GLenum err = glGetError()) {
-		std::cerr << "OpenGl Error : " << err << std::endl;
-		return false;
-	}
-	return true;
-}
 
 namespace GE {
 
@@ -62,14 +44,14 @@ namespace GE {
 
 		virtual void setAttribute(GLint position, int posSize, GLint uv, int uvSize);
 
-		 virtual void bindVBO();
-		 virtual void unbindVBO();
+		virtual void bindVBO();
+		virtual void unbindVBO();
 
-		 virtual void bindIBO();
-		 virtual void unbindIBO();
+		virtual void bindIBO();
+		virtual void unbindIBO();
 
-		 virtual void bindTexture(GLuint sample);
-		 virtual void unbindTexture();
+		virtual void bindTexture(GLuint sample);
+		virtual void unbindTexture();
 
 	protected:
 		GLuint vbo;
