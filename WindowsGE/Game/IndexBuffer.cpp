@@ -1,0 +1,26 @@
+#include "IndexBuffer.h"
+
+GE::IndexBuffer::IndexBuffer(unsigned int _count, const void* data) : count(count)
+{
+	GLCALL(glGenBuffers(1, &renderer_ID));
+	GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderer_ID));
+	GLCALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, _count * sizeof(unsigned int), data, GL_STATIC_DRAW));
+	count = _count;
+}
+
+GE::IndexBuffer::~IndexBuffer()
+{
+	GLCALL(glDeleteBuffers(1, &renderer_ID));
+}
+
+void GE::IndexBuffer::bind() const
+{
+	GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderer_ID));
+
+}
+
+void GE::IndexBuffer::unbind() const
+{
+	GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+
+}

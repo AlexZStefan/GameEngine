@@ -1,0 +1,13 @@
+# Blender MTL File: 'roman_warriors.blend'
+# Material Count: 1
+
+newmtl pasted__pasted__pasted__surfaceShader4SG1
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd C:\\Projects\\assets\\models\\Free_Warriors_Turbosquid\\models\\OBJ STL (static)\\obj\\roman_red_D_texture.jpg

@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GE::Frame_Rate" Collapsed="true">
+    <Position X="18.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::Billboard" Collapsed="true">
+    <Position X="2.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQAAQAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Billboard.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::BillboardRenderer" Collapsed="true">
+    <Position X="9" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgiAcAAEAAAAAAgAAAKAAAAAAAABAAJAAAAgAoAAABA=</HashCode>
+      <FileName>BillboardRenderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::Camera" Collapsed="true">
+    <Position X="15.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAiAymwARAAAAIAYAxAgIAAAAgI0EAgAgBoAYAGAgA=</HashCode>
+      <FileName>Camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::FontRenderer" Collapsed="true">
+    <Position X="17" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>SAICAAAAACAAAAAABAAAAACBAAABQAAIAAAQCAAAAAA=</HashCode>
+      <FileName>FontRenderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::Time" Collapsed="true">
+    <Position X="15.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABBAAAAAAAAAAAwAAAAAAAAAAAAAAAAABAAAAAAAUA=</HashCode>
+      <FileName>GameEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::GameEngine" Collapsed="true">
+    <Position X="20.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QABAAAABAAcACAAgBiMAAQUyBgAAhAJpgACQRCR2AoA=</HashCode>
+      <FileName>GameEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::IndexBuffer" Collapsed="true">
+    <Position X="15.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAQAAAAIAAAAAABAAAEAABAAAAAAAAAAAAAAAEBAA=</HashCode>
+      <FileName>IndexBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::InputSystem" Collapsed="true">
+    <Position X="17" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAggAUAEAAAAAAAAAAAAAAAAIAAAAAAAEIAAA=</HashCode>
+      <FileName>InputSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::Material" Collapsed="true">
+    <Position X="1.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Material.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::Model" Collapsed="true">
+    <Position X="5.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>SQAARACGAChBgAgAIAoABAAgAAwcAgEAAAoQCABAAAA=</HashCode>
+      <FileName>Model.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::ObjectLoader" Collapsed="true">
+    <Position X="4.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAQAIAAAAA=</HashCode>
+      <FileName>ObjectLoader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::GUIRenderer" Collapsed="true">
+    <Position X="11.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAJgAAAAAgAIAgAAEQAgAAAAAAgAAAgAAAAAAAAAxA=</HashCode>
+      <FileName>GUIRenderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::OrthographicCamera" Collapsed="true">
+    <Position X="18.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>OrthographicCamera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::ParticleRenderer" Collapsed="true">
+    <Position X="9" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AYYAAAAIAEAIAEAAAA4AAQQAEQAEEmAAwAAAIgUAAgA=</HashCode>
+      <FileName>ParticleSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::Renderer" Collapsed="true">
+    <Position X="20.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABgEIAAAAAEgEgYAEIAAAAEAAkAAAoAAACgAMAMARA=</HashCode>
+      <FileName>Renderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::Shader" Collapsed="true">
+    <Position X="1.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QIAAAACAAMAACAIAAAAACAAAAAAAAAAYBAAAAgAQBAA=</HashCode>
+      <FileName>Shader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::SkyboxRenderer" Collapsed="true">
+    <Position X="13.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAMACFAIQAAAoAAAIAAEAAAAAAAACAAAAgAIACAQA=</HashCode>
+      <FileName>SkyboxRenderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::Transform" Collapsed="true">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAIAQCAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structs.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::Object" Collapsed="true">
+    <Position X="6.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAQAAgEAgAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Structs.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::TerrainGenerator" Collapsed="true">
+    <Position X="6.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAQAAAAAAEAAgABAACAAAAAIBAAEAQoCBMIEQAIAAA=</HashCode>
+      <FileName>TerrainGenerator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::Texture" Collapsed="true">
+    <Position X="13.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>SAAABAAABIAAggQAQAACCAAAAAAASAAEAAKAAAAAAAA=</HashCode>
+      <FileName>Texture.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::VertexBufferLayout" Collapsed="true">
+    <Position X="20.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAiAAAAAAAAABAAAAAAAAAAAAAAAAAQEIAAAAAAI=</HashCode>
+      <FileName>VertexArray.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::VertexArray" Collapsed="true">
+    <Position X="17" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACACAAAIIAAgAAAAAAAAAAAAAAAAAAAACAgAEAABAA=</HashCode>
+      <FileName>VertexArray.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GE::VertexBuffer" Collapsed="true">
+    <Position X="18.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAQAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAA=</HashCode>
+      <FileName>VertexBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="GE::Player" Collapsed="true">
+    <Position X="17" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAEAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>GameEngine.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GE::CubeVertex" Collapsed="true">
+    <Position X="15.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAABgAQAAAAA=</HashCode>
+      <FileName>SkyboxRenderer.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GE::Vector3&lt;T&gt;" Collapsed="true">
+    <Position X="18.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAQEAAAA=</HashCode>
+      <FileName>Structs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GE::Vertex" Collapsed="true">
+    <Position X="20.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAIAAAAAAAAAAAAAQBJgAQAAABA=</HashCode>
+      <FileName>Structs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GE::VertexUV" Collapsed="true">
+    <Position X="18.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAABJgAQAAAAA=</HashCode>
+      <FileName>Structs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GE::VertexRGBA" Collapsed="true">
+    <Position X="17" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAoAQBhAQAAAAA=</HashCode>
+      <FileName>Structs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GE::VertexBufferElement" Collapsed="true">
+    <Position X="15.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAABAAAAAAAAAABABAAAAAAAAAAAAA=</HashCode>
+      <FileName>VertexArray.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="GE::GameModels" Collapsed="true">
+    <Position X="15.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQBAABAAAggAAAQAAAAABAAggACAAAgAAAAAACAgA=</HashCode>
+      <FileName>GameEngine.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GE::Textures" Collapsed="true">
+    <Position X="17" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAIBAQAAACEAoIAAAAEAAQIBAQqAAMEAAAADAg=</HashCode>
+      <FileName>GameEngine.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
