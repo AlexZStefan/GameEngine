@@ -19,6 +19,13 @@ namespace GE {
 	template<typename T>
 	struct Vec3 {
 		T x, y, z;
+
+		Vec3() {
+			x = 0;
+			y = 0;
+			z = 0;
+		};
+
 		Vec3(T _x, T _y, T _z) {
 			x = _x;
 			y = _y;
@@ -128,12 +135,12 @@ namespace GE {
 
 	struct Transform {
 	public:
-		//Transform() {};
-		//Transform(Vec3f _pos = Vec3f(0,0,0), Vec3f _scale = Vec3f(0,0,0), Vec3f _rot = Vec3f(0,0,0)) {
-		//	position = _pos;
-		//	scale = _scale;
-		//	rotation = _rot;
-		//};
+		
+		Transform(Vec3f _pos = Vec3f(0,0,0), Vec3f _scale = Vec3f(1,1,1), Vec3f _rot = Vec3f(0,0,0)) {
+			position = _pos;
+			scale = _scale;
+			rotation = _rot;
+		};
 
 		operator physx::PxTransform() const {
 			physx::PxVec3 pos(position.x, position.y, position.z);
@@ -154,9 +161,30 @@ namespace GE {
 		}
 
 		std::string name;
-		Vec3f position = { 0,0,0 };
-		Vec3f scale = { 1,1,1 };
-		Vec3f rotation = { 0,0,0 };
+		Vec3f position	= { 0,0,0 };
+		Vec3f scale		= { 1,1,1 };
+		Vec3f rotation	= { 0,0,0 };
+		Vec3f forward = CalculateForwardVector();
+
+		Vec3f CalculateForwardVector() const {
+			// Convert Euler angles to radians
+			float yaw = rotation.y * static_cast<float>(M_PI) / 180.0f; // Assuming rotation.y is yaw angle in degrees
+			float pitch = rotation.x * static_cast<float>(M_PI) / 180.0f; // Assuming rotation.x is pitch angle in degrees
+
+			// Calculate sine and cosine of yaw and pitch angles
+			float cosYaw = cos(yaw);
+			float sinYaw = sin(yaw);
+			float cosPitch = cos(pitch);
+			float sinPitch = sin(pitch);
+
+			// Calculate forward vector components
+			Vec3f forward;
+			forward.x = cosYaw * cosPitch;
+			forward.y = sinPitch;
+			forward.z = sinYaw * cosPitch;
+
+			return forward;
+		}
 	};
 
 	class Object  {
@@ -164,6 +192,7 @@ namespace GE {
 		Object() { };
 		~Object() { };
 		Transform transform = Transform();
+
 	};
 
 	struct Vertex {

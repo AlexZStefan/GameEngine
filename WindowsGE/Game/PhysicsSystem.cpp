@@ -1,4 +1,5 @@
 #include "PhysicsSystem.h"
+#include "ThreadPool.h"
 
 namespace GE {
 	extern Coordinator gCoordinator;
@@ -107,7 +108,7 @@ namespace GE {
 	}	
 
 	// TODO FIX THE INDECES SO THAT THEY CAN BE PASSED CORRECTLY TO MESH DESC
-	PxRigidDynamic* PhysicsSystem::CreateTriangleDynamicMesh(Model* _model)
+	PxRigidDynamic* PhysicsSystem::CreateTriangleDynamicMesh(Model* _model, int entity)
 	{
 		const physx::PxU32 numVerts = _model->vertices.size();
 		std::vector<PxVec3>* pxVerts = new std::vector<PxVec3>();
@@ -144,7 +145,7 @@ namespace GE {
 		if (!PxCookTriangleMesh(params, triangleMeshDesc, outStream));
 			std::cout << "Failed to cook convex mesh";
 		PxDefaultMemoryInputData inStream(outStream.getData(), outStream.getSize());		
-		PxRigidDynamic* actor = m_PhysX->createRigidDynamic(physx::PxTransform(1, 1, 1));
+		PxRigidDynamic* actor = m_PhysX->createRigidDynamic(_model->transform);
 		{
 			actor->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
 		}
@@ -156,11 +157,13 @@ namespace GE {
 		actor->setMass(1.0f);
 		actor->setMassSpaceInertiaTensor(PxVec3(1.0f, 1.0f, 1.0f));
 
-		actor->setGlobalPose(physx::PxTransform(_model->transform.position.x, _model->transform.position.y, _model->transform.position.z));
+		Transform transform = gCoordinator.GetComponent<Transform>(entity);
+		actor->setGlobalPose(transform);
 		actor->attachShape(*triangleShape);
 		actor->setName(_model->name.c_str());
 
 		m_PxScene->addActor(*actor);
+		
 
 		delete pxVerts;
 		pxVerts = nullptr;
@@ -439,17 +442,24 @@ namespace GE {
 	}
 
 	void PhysicsSystem::Update(float deltaTime)
-	{
-		m_PxScene->simulate(deltaTime);
-		m_PxScene->fetchResults(true);
+	{		
+		
+		//auto task = [=]() {
+		//};
+			m_PxScene->simulate(deltaTime);
+			m_PxScene->fetchResults(true);
+
+		//threadPool.enqueue(task);
+
 		for (auto const& entity : mEntities)
 		{
-			auto& physics = gCoordinator.GetComponent<Physics>(entity);
-			auto& transform = gCoordinator.GetComponent<Transform>(entity);
-			auto& mod = gCoordinator.GetComponent<Model>(entity);
+				auto& physics = gCoordinator.GetComponent<Physics>(entity);
+				auto& transform = gCoordinator.GetComponent<Transform>(entity);
+				// auto& mod = gCoordinator.GetComponent<Model>(entity);
 
-			PxTransform pxTransform = transform;
-				physics.actor->setGlobalPose(pxTransform);
+				if (physics.isKinematic) {
+					physics.actor->setGlobalPose(transform);
+				}
 
 				/*if (physics.isKinematic) {
 					PxTransform actorTransform = physics.actor->getGlobalPose();
@@ -457,7 +467,11 @@ namespace GE {
 					transform.position.x += 10 * deltaTime;
 					physics.actor->setGlobalPose(actorTransform);
 				}*/
+
+			// Enqueue the task
+				
 		}
+			
 	}
 
 	void PhysicsSystem::ShutDown()

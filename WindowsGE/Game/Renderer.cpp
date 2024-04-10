@@ -206,7 +206,7 @@ namespace GE {
 						
 			// std::cout << "render model indices - " + renderIndeces;
 			
-			if (false && model.getIndicesCount() > 0) // remove false
+			if (false && model.name == "ter" &&  model.getIndicesCount() > 0) // remove false
 			{ // draw indices 
 				model.bindIBO();
 				GLCALL(glDrawElements(GL_TRIANGLES, model.getIndicesCount(), GL_UNSIGNED_INT, nullptr))

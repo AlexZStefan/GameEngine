@@ -1620,7 +1620,6 @@ void ImGui::ShowDemoWindow(bool* p_open)
                     ImGui::CloseCurrentPopup();
                 ImGui::EndPopup();
             }
-
             ImGui::TreePop();
         }
 

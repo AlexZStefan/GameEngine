@@ -1,6 +1,4 @@
 #pragma once
-#pragma once
-
 
 #include "systems/ECS/Coordinator.h"
 #include "Camera.h"
@@ -18,7 +16,6 @@
 #include "ObjectManager.h"
 #include "PhysicsSystem.h"
 #include "EngineInterface.h"
-
 #include <functional>
 #include <thread>
 #include <SDL.h>
@@ -86,11 +83,10 @@ namespace GE {
 		// -1 addaptive Sync, 1 for updated sync with vertical retrace, 0 for immediate updates
 		GameEngine(int setVSync);
 		GameEngine(const GameEngine&);
-
 		virtual ~GameEngine();
 
-		float windowHeight = 960.0f;
-		float windowWidth = 1280.0f;
+		int windowHeight = 960.0f;
+		int windowWidth = 1280.0f;
 		Time* times;
 		bool init();
 		bool initShaders();
@@ -103,8 +99,9 @@ namespace GE {
 		Shared<Shader> shader_basic_text;
 		SDL_Window* window;
 		std::unique_ptr<ObjectManager> objectManager;
+		void PrintNumber();
+		void AddModel(Vec3f position);
 		void Test();
-		void AddModel();
 		void Raycast();
 
 	private:
@@ -113,8 +110,11 @@ namespace GE {
 		void load_textures(std::string filePath);
 
 		bool initModels();
+		void ModelTest();
 		void createRenderer();
-			
+
+		void MultithreadingMainLoop(float dt);
+		
 		template<typename T>
 		void AddGuiInspectorComponent(Entity entity);
 

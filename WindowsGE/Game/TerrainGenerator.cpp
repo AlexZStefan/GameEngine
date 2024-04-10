@@ -84,6 +84,26 @@ namespace GE {
 			}
 		}
 
+		// alternative indexing
+		//for (int row = 0; row < mapHeight - 1; row++) {
+		//	for (int column = 0; column < mapWidth - 1; column++) {
+		//		unsigned int topLeft = row * mapWidth + column;
+		//		unsigned int topRight = topLeft + 1;
+		//		unsigned int bottomLeft = (row + 1) * mapWidth + column;
+		//		unsigned int bottomRight = bottomLeft + 1;
+
+		//		// First triangle
+		//		indices.push_back(topLeft);
+		//		indices.push_back(bottomLeft);
+		//		indices.push_back(topRight);
+
+		//		// Second triangle
+		//		indices.push_back(topRight);
+		//		indices.push_back(bottomLeft);
+		//		indices.push_back(bottomRight);
+		//	}
+		//}
+
 		indexCount = indices.size();
 		numVertices = vertices.size();
 		SDL_FreeSurface(heightMap);

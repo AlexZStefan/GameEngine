@@ -11125,6 +11125,9 @@ bool ImGui::MenuItem(const char* label, const char* shortcut, bool* p_selected, 
 
 bool ImGui::BeginMainMenuBar()
 {
+    /* old 
+    bool ImGui::BeginMainMenuBar()
+{
     ImGuiContext& g = *GImGui;
     SetNextWindowPos(ImVec2(0.0f, 0.0f));
     SetNextWindowSize(ImVec2(g.IO.DisplaySize.x, g.FontBaseSize + g.Style.FramePadding.y * 2.0f));
@@ -11140,6 +11143,27 @@ bool ImGui::BeginMainMenuBar()
     g.CurrentWindow->DC.MenuBarOffsetX += g.Style.DisplaySafeAreaPadding.x;
     return true;
 }
+*/
+
+    ImGuiContext& g = *GImGui;
+    SetNextWindowPos(ImVec2(0.0f, 0.0f));
+    SetNextWindowSize(ImVec2(g.IO.DisplaySize.x, g.FontBaseSize + g.Style.FramePadding.y * 2.0f));
+    PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(0,0));
+    if (!Begin("##MainMenuBar", NULL, ImGuiWindowFlags_NoTitleBar|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoMove|ImGuiWindowFlags_NoScrollbar|ImGuiWindowFlags_NoSavedSettings|ImGuiWindowFlags_MenuBar)
+        || !BeginMenuBar())
+    {
+        End();
+        PopStyleVar(2);
+        return false;
+    }
+    g.CurrentWindow->DC.MenuBarOffsetX += g.Style.DisplaySafeAreaPadding.x;
+    return true;
+
+}
+
+
+
 
 void ImGui::EndMainMenuBar()
 {

@@ -1,6 +1,5 @@
-#include "GameEngine.h"
+﻿#include "GameEngine.h"
 namespace GE {
-
 	Coordinator gCoordinator;
 	EngineInterface engineInterface;
 
@@ -8,6 +7,7 @@ namespace GE {
 	{
 		setVsync = setVSync;
 		objectManager = std::make_unique <ObjectManager>();
+	
 	}
 
 	GE::GameEngine::~GameEngine()
@@ -16,6 +16,7 @@ namespace GE {
 
 	bool GE::GameEngine::init()
 	{
+		
 		times = new Time();
 		/* Initialize the SDL library */
 		if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -78,11 +79,13 @@ namespace GE {
 		// Create shaders 
 		initShaders();
 		// Load up models
+		
 		initModels();
+
+		//initModels();
 		// Create renderers 
 		createRenderer();
-
-		
+				
 		// create input system
 		inputSystem = std::make_unique<InputSystem>(&input_event, main_cam, physicsSystem);
 		std::cout << "SDL Init successful " << std::endl;
@@ -95,15 +98,43 @@ namespace GE {
 		shader_basic->SetUniform3i("lightPosition", 1, 1, 1);
 		shader_basic->SetUniform3i("viewPosition", 1, 1, 1);*/
 
+		// This needs to stay as raycasting does not work on entity 0
+		auto rootEntity = gCoordinator.CreateEntity();
+		gameEntities.push_back(rootEntity);
+
 		/// <summary>
-		/// TEST FROM HERE ON
+		/// TEST FROM HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		/// </summary>
 		/// <returns></returns>
-		/// 	
+	
 		//Test();
-		AddModel();
+		//AddModel(Vec3f(0,-5,0));
+
+		ModelTest();
+	/*	ThreadPool pool(6);
+
+		ThreadPool::Task task1 = []() {
+			int nr = rand();
+			std::cout << "Printing random number: " << nr << std::endl;
+		};
+		pool.enqueue(task1);
+		pool.enqueue(task1);
+		pool.enqueue(task1);
+		pool.enqueue(task1);*/
+		//pool.enqueue(task1);
+		//pool.enqueue(std::bind(&GameEngine::PrintNumber, this));
+		//pool.enqueue(std::bind(&GameEngine::AddModel, this, Vec3f(10,10,0)));
+		//pool.enqueue(AddModel(Vec3f(10,10,0)));
+		//pool.enqueue(std::bind(&GameEngine::AddModel, this, Vec3f(10, 10, 0)));
+
+		std::cout << "Returning: " << std::endl;
 
 		return true;
+	}
+	
+	void GameEngine::PrintNumber() {
+		int nr = rand();
+		std::cout << "Printing random number: " << nr << std::endl;
 	}
 
 	bool GE::GameEngine::initShaders() {
@@ -128,9 +159,8 @@ namespace GE {
 		return true;
 	}
 
-	bool GE::GameEngine::InitialiseSystems() {
+	bool GE::GameEngine::InitialiseSystems() {		
 		SDL_WarpMouseInWindow(window, windowWidth / 2, windowHeight / 2);
-
 		gCoordinator.Init();
 		gCoordinator.RegisterComponent<Transform>();
 		gCoordinator.RegisterComponent<Player>();
@@ -158,13 +188,11 @@ namespace GE {
 			physicsSystem->StartUp();
 		}
 		
-		engineInterface.EngineInterfaceInit(main_cam, physicsSystem);
+		engineInterface.EngineInterfaceInit(main_cam, physicsSystem, windowWidth, windowHeight, window);
 
 		return true;  
 	}
-
-	
-
+	using namespace std::chrono_literals;
 	bool GE::GameEngine::initModels() {
 		game_textures;
 		load_textures("./resources/assets/textures.txt");
@@ -175,6 +203,13 @@ namespace GE {
 		load_models("./resources/assets/models.txt");
 		// set healthbar height 
 		game_textures[health_bar]->setHeight(20);
+
+		for (Shared<Model> gm : game_models) {
+			while (gm->modelLoaded == false)
+			{
+				std::this_thread::sleep_for(2000ms);
+			}
+		}
 
 		terrain = std::make_shared<TerrainGenerator>("./resources/assets/textures/hmap.jpg", 1, 1);
 		blb = std::make_shared<Billboard>(game_textures[tree_billboard]);
@@ -206,27 +241,9 @@ namespace GE {
 		}
 		return true;
 	}
+
 #pragma region Tests
-	// PHYSICS 
-	void GameEngine::AddModel() {
-
-		//Model terM = Model();
-		//terM.loadFromFile("./resources/assets/models/ter.obj", 0);
-		std::vector<PxVec3>* pxVerts = new std::vector<PxVec3>();
-		Shared<Model> m = game_models[terrain_model];
-		for (int i = 0; i < m->vertices.size(); i++) {
-			PxVec3 pos;
-			Vertex& v = m->vertices[i];
-			pos.x = v.x;
-			pos.y = v.y;
-			pos.z = v.z;
-			pxVerts->push_back(pos);
-		}
-		//physicsSystem->CreateTerrainMesh(pxVerts, m->vertices.size());
-		/*Entity cart = objectManager->CreateObject();
-		objectManager->AddComponent(cart, Model(shader_basic_normals));
-		Transform& a = objectManager->AddComponent(cart, Transform{});*/
-
+	void  GE::GameEngine::ModelTest() {	
 		auto eTerrain = gCoordinator.CreateEntity();
 		{
 			gCoordinator.AddComponent(eTerrain, Transform{});
@@ -253,12 +270,11 @@ namespace GE {
 			gCoordinator.AddComponent(eShip, Physics{});
 			auto& model = gCoordinator.GetComponent<Model>(eShip);
 			model.SetModel(game_models[ship]);
-			model.transform.position = Vec3f(0, 35, 0);
 
 			// generate physics terrain
 			auto& phy = gCoordinator.GetComponent<Physics>(eShip);
 			model.transform.position = gCoordinator.GetComponent<Transform>(eShip).position;
-			phy.actor = physicsSystem->CreateTriangleDynamicMesh(&model);
+			phy.actor = physicsSystem->CreateTriangleDynamicMesh(&model, eShip);
 			phy.isKinematic = true;
 			/*
 			phy.AddShape(physicsSystem->m_PhysX->createShape(physx::PxBoxGeometry(1, 1, 1), *physicsSystem->m_PxDefaultMaterial));
@@ -275,13 +291,15 @@ namespace GE {
 			gCoordinator.AddComponent(eShip2, Model{});
 			gCoordinator.AddComponent(eShip2, Physics{});
 			auto& model = gCoordinator.GetComponent<Model>(eShip2);
-			model.SetModel(game_models[ship]);
-			model.transform.position = Vec3f(0, 25, 0);
+			model.SetModel(game_models[roman_warriors_blue]);
+			model.transform.position = Vec3f(0, -5, 0);
 
 			// generate physics terrain
 			auto& phy = gCoordinator.GetComponent<Physics>(eShip2);
 			model.transform.position = gCoordinator.GetComponent<Transform>(eShip2).position;
-			phy.actor = physicsSystem->CreateTriangleDynamicMesh(&model);
+			phy.actor = physicsSystem->CreateTriangleDynamicMesh(&model, eShip2);
+			phy.actor->setGlobalPose(model.transform);
+			phy.isKinematic = true;
 
 			/*
 			phy.AddShape(physicsSystem->m_PhysX->createShape(physx::PxBoxGeometry(1, 1, 1), *physicsSystem->m_PxDefaultMaterial));
@@ -290,7 +308,59 @@ namespace GE {
 			physicsSystem->m_PxScene->addActor(*phy.actor);
 			*/
 		}
-		gameEntities.push_back(eShip2);
+		gameEntities.push_back(eShip2);	
+	}
+	// PHYSICS 
+	void GameEngine::AddModel(Vec3f position) {
+		std::cout << "Running adding model: " << std::endl;
+
+		auto entity = gCoordinator.CreateEntity();
+		{
+			std::cout << "Adding model components: " << std::endl;
+
+			gCoordinator.AddComponent(entity, Transform{});
+			gCoordinator.AddComponent(entity, Model{});
+			gCoordinator.AddComponent(entity, Physics{});
+
+			std::cout << "gCoordinator.GetComponent<Model>: " << std::endl;
+			auto& model = gCoordinator.GetComponent<Model>(entity);
+			model.SetModel(game_models[ship]);
+			model.transform = position;
+			
+			auto& transform = gCoordinator.GetComponent<Transform>(entity);
+
+			// Change this with a standard model 
+			std::cout << "gCoordinator.GetComponent<Physics>: " << std::endl;
+			auto& phy = gCoordinator.GetComponent<Physics>(entity);
+			phy.actor = physicsSystem->CreateTriangleDynamicMesh(&model, entity);
+			phy.isKinematic = true;
+			/*
+			phy.AddShape(physicsSystem->m_PhysX->createShape(physx::PxBoxGeometry(1, 1, 1), *physicsSystem->m_PxDefaultMaterial));
+			phy.AddActor(physicsSystem->m_PhysX->createRigidDynamic(localTm));
+			phy.actor->attachShape(*phy.shape);
+			physicsSystem->m_PxScene->addActor(*phy.actor);
+			*/
+		}
+			gameEntities.push_back(entity);
+			std::cout << "Adding model to objects list: " << std::endl;
+		//Model terM = Model();
+		//terM.loadFromFile("./resources/assets/models/ter.obj", 0);
+		/*std::vector<PxVec3>* pxVerts = new std::vector<PxVec3>();
+		Shared<Model> m = game_models[terrain_model];
+		for (int i = 0; i < m->vertices.size(); i++) {
+			PxVec3 pos;
+			Vertex& v = m->vertices[i];
+			pos.x = v.x;
+			pos.y = v.y;
+			pos.z = v.z;
+			pxVerts->push_back(pos);
+		}*/
+		//physicsSystem->CreateTerrainMesh(pxVerts, m->vertices.size());
+		/*Entity cart = objectManager->CreateObject();
+		objectManager->AddComponent(cart, Model(shader_basic_normals));
+		Transform& a = objectManager->AddComponent(cart, Transform{});*/
+
+		
 	}
 
 	void GameEngine::Test() {
@@ -330,7 +400,8 @@ namespace GE {
 			"./resources/assets/textures/cloud_lf.jpg" // 2
 			);
 
-		rend_billboard = std::make_unique<BillboardRenderer>("billboard.vert", "billboard.frag");
+		//@ PARTICLES AND BILLBOARD
+		/*rend_billboard = std::make_unique<BillboardRenderer>("billboard.vert", "billboard.frag");
 		rend_billboard->loadVA();
 
 		Vec3f rainScale = Vec3f(1, 1, 1);
@@ -339,7 +410,7 @@ namespace GE {
 
 		Vec3f cloudScale = Vec3f(200, 200, 100);
 		clouds_particles = std::make_unique<ParticleRenderer>(b_cloud, main_cam, cloudScale, 250, 50);
-		clouds_particles->loadVA();
+		clouds_particles->loadVA();*/
 
 		//game_renderers.push_back(std::make_unique<Renderer>(terrain, shader_basic));
 		//game_renderers.push_back(std::make_unique<Renderer>(game_models[ship], shader_basic));
@@ -438,10 +509,9 @@ namespace GE {
 		}
 	}
 
-	void GE::GameEngine::update(float dt)
-	{
+	void GameEngine::MultithreadingMainLoop(float dt) {
 		inputSystem->Update(window, dt);
-		
+
 		float camX = main_cam->getPosX();
 		float camY = main_cam->getPosY();
 		float camZ = main_cam->getPosZ();
@@ -490,6 +560,18 @@ namespace GE {
 
 			clouds_particles->Update(main_cam, Vec3f(1000, 100, 0), Vec3f(cloud_x, 100, cloud_z)
 				, Vec3f(1, 0, 0));*/
+	}
+
+	void GE::GameEngine::update(float dt)
+	{
+		//auto t_start = std::chrono::high_resolution_clock::now();
+		//ThreadPool pool(std::thread::hardware_concurrency());
+		////pool.enqueue(std::bind(&MultithreadingMainLoop, std::placeholders::_1), dt);
+		//pool.enqueue([=]() {
+		//	});
+		//auto t_end = std::chrono::high_resolution_clock::now();
+		//auto totalTime = (t_start - t_end) / 1e+6;// ms;☺
+			MultithreadingMainLoop(dt);
 	}
 
 	float light = 0;
@@ -551,8 +633,12 @@ namespace GE {
 		//		r->draw(main_cam);
 		//} 
 	//	physicsSystem->Update(dt);
+
 		rendererSystem->update(main_cam);
-		physicsSystem->Update(dt);
+		//pool.enqueue(std::bind(&MultithreadingMainLoop, std::placeholders::_1), dt);
+		
+
+			physicsSystem->Update(dt);
 		/*for (int i = 0; i < foliage.size()-1; i++) {
 			rend_billboard->draw(foliage[i], main_cam);
 		};*/
@@ -574,48 +660,26 @@ namespace GE {
 		player.health--;
 		glDisable(GL_BLEND);
 
-		// debug Gui
 		ImGui_ImplSdlGL3_NewFrame(window);
-		{
-			static float f = 0.0f;
-			static int counter = 0;
-			ImGui::Text("Hello, world!");                           // Display some text (you can use a format string too)
-			ImGui::SliderFloat3("Rock->position", &game_models[rock]->transform.position.x, -100.0f, 1000);            // Edit 1 float using a slider from 0.0f to 1.0f    
-			ImGui::SliderFloat3("GreekRWarrior->position", &game_models[roman_warriors_red]->transform.position.x, -100.0f, 1000);            // Edit 1 float using a slider from 0.0f to 1.0f    
-			ImGui::SliderFloat3("GreekBWarrior->position", &game_models[roman_warriors_red]->transform.position.x, -100.0f, 1000);            // Edit 1 float using a slider from 0.0f to 1.0f    
-			ImGui::SliderFloat3("Tree->position", &game_models[lowp_tree]->transform.position.x, -100.0f, 1000);            // Edit 1 float using a slider from 0.0f to 1.0f    
-			ImGui::SliderFloat3("Tree->scale", &game_models[lowp_tree]->transform.scale.x, 1.0, 100);            // Edit 1 float using a slider from 0.0f to 1.0f    
-			ImGui::SliderFloat3("LightColor", &lightning.x, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-			ImGui::SliderFloat3("WoodCart Pos", &game_models[new_cart]->transform.position.x, 0.0f, 200.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-			ImGui::SliderFloat3("WoodCart Scale", &game_models[new_cart]->transform.scale.x, 0.0f, 10.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-			ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-			//ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our windows open/close state
-			ImGui::Checkbox("Another Window", &show_another_window);
-
-			if (ImGui::Button("Button"))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-				counter++;
-			ImGui::SameLine();
-			ImGui::Text("counter = %d", counter);
-
-			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		}
-
 		// 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
-		engineInterface.DisplayCurrentSellectedData(windowWidth, windowHeight, gameEntities);
+		engineInterface.DisplayCurrentSellectedData(gameEntities);
+		engineInterface.Menu();
 
 		// 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
 		if (show_demo_window)
 		{
-			ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
+			ImGui::SetNextWindowPos(ImVec2(0, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
 			ImGui::ShowDemoWindow(&show_demo_window);
 		}
 
 		// Rendering
-		glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
+		// -19 is the menu size and it should not be hardcoded 
+		glViewport(0, -19, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
 
 		ImGui::Render();
 		ImGui_ImplSdlGL3_RenderDrawData(ImGui::GetDrawData());
+
+		
 	}
 
 	template <typename T>
@@ -691,33 +755,44 @@ namespace GE {
 		in.close();
 
 		// for each line - load model and push into model into game_models
+
+		ThreadPool pool(std::thread::hardware_concurrency());
+
+		auto t_start = std::chrono::high_resolution_clock::now();
+
 		for (std::string& line : lines) {
+			ThreadPool::Task task1 = [&](...) {
+				Shared<Model> model = std::make_shared<Model>(shader_basic_normals);
 
-			Shared<Model> model = std::make_shared<Model>(shader_basic_normals);
+				std::string name;
+				for (auto& e : line) {
+					if (e == '.') break;
+					name.push_back(e);
+				}
 
-			std::string name;
-			for (auto& e : line) {
-				if (e == '.') break;
-				name.push_back(e);
-			}
+				bool flipUV = false;
+				line.back() == '1' ? flipUV = true : flipUV = false;
+				line.pop_back();
 
-			bool flipUV = false;
-			line.back() == '1' ? flipUV = true : flipUV = false;
-			line.pop_back();
+				model->loadFromFile(("./resources/assets/models/" + line).c_str(), flipUV);
+				if (model == NULL) std::cout << "model not loaded :" + line << std::endl;
 
-			model->loadFromFile(("./resources/assets/models/" + line).c_str(), flipUV);
-			if (model == NULL) std::cout << "model not loaded :" + line << std::endl;
+				model->name = name;
+				// set default shader
+		/*		model->mat->shader = rendererSystem->shaders["shader_basic_normals"];
+				model->shader = rendererSystem->shaders["shader_basic_normals"];*/
+				//model->Init();
+				std::cout << "ADD DEFAULT TEXTURE when (GameEngine.loadModels) \n";
+				model->setNormal(game_textures[ship_uv]->getNormalMap());
+				model->setMaterial(game_textures[ship_uv]->getTexture());
+				game_models.push_back(model);
+			};
+			pool.enqueue(task1);
+		}
 
-			model->name = name;
-			// set default shader
-	/*		model->mat->shader = rendererSystem->shaders["shader_basic_normals"];
-			model->shader = rendererSystem->shaders["shader_basic_normals"];*/
-			//model->Init();
-			std::cout << "ADD DEFAULT TEXTURE when (GameEngine.loadModels) \n";
-			model->setNormal(game_textures[ship_uv]->getNormalMap());
-			model->setMaterial(game_textures[ship_uv]->getTexture());
-			game_models.push_back(model);
-		};
+		auto t_end = std::chrono::high_resolution_clock::now();
+		auto passedTime = std::chrono::duration<double, std::micro>(t_end - t_start).count();
+		std::cout << "Time passed " << passedTime << std::endl;
 	}
 
 	void display_info_message(const char* msg) {

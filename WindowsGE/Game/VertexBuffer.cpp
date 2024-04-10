@@ -3,7 +3,18 @@
 // drawType 0 = static, 1 = strean, 2 = dynamic 
 GE::VertexBuffer::VertexBuffer(unsigned int size, const void* data, int drawType)
 {
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR) {
+		// Handle OpenGL error
+		std::cout << "ERROR : " << error << std::endl;
+	}
+
 	GLCALL(glGenBuffers(1, &renderer_ID));
+	 error = glGetError();
+	if (error != GL_NO_ERROR) {
+		// Handle OpenGL error
+		std::cout << "ERROR : " << error << std::endl;
+	}
 	GLCALL(glBindBuffer(GL_ARRAY_BUFFER, renderer_ID));
 
 	switch (drawType)

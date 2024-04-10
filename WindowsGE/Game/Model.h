@@ -97,8 +97,10 @@ namespace GE {
 		GLuint normalID;
 		//std::unique_ptr<Texture> texture; 
 		GLuint ibo;
+		bool modelLoaded = false;
 	protected:
 	private:
+
 		Shared<VertexBuffer> vb;
 		Shared<IndexBuffer> ib;
 		Shared<VertexArray> va;

@@ -1,9 +1,10 @@
 #pragma once
-#include <iostream>
 #include "phxinclude/PxPhysicsAPI.h"
 #include "systems/ECS/Coordinator.h"
 #include "Structs.h"
 #include "Model.h"
+#include "ThreadPool.h"
+#include <iostream>
 
 #define PX_RELEASE(x)	if(x)	{ x->release(); x = NULL;	}
 
@@ -32,7 +33,9 @@ namespace GE {
 
 	class PhysicsSystem : public System {
 	public:
-		PhysicsSystem() {}
+		PhysicsSystem() {
+			threadPool = new ThreadPool(std::thread::hardware_concurrency());
+		}
 		// Variables we will need
 		physx::PxDefaultAllocator					m_PxAllocator;
 		physx::PxDefaultErrorCallback				m_PXErrorCallback;
@@ -64,19 +67,22 @@ namespace GE {
 
 		//PxRigidStatic* CreateTerrainMesh(const std::vector<physx::PxVec3>* verts, const physx::PxU32 numVerts);
 		PxRigidDynamic* CreateConvexMesh(Model* _model);
-		PxRigidDynamic* CreateTriangleDynamicMesh(Model* _model);
-		PxRigidStatic* CreateTriangleStaticMesh(Model* _model);
+		PxRigidDynamic* CreateTriangleDynamicMesh(Model* _model, int);
+		PxRigidStatic * CreateTriangleStaticMesh(Model* _model);
+		PxRigidStatic * CreateStaticActor();
 		PxRaycastBuffer RayCastToObject(PxVec3 origin, PxVec3 unitDir, float maxDist);
 		/*	PxRigidDynamic* CreateConvexDynamicMesh(Model* _model);
 		PxRigidDynamic* CreateDynamicRB(Model* _model);
 		PxRigidDynamic* CreateTriangleMesh(Model* _model);
 		void CreateConvexStaticMesh(Model* _model);*/
 		void StartUp();
-		PxRigidStatic* CreateStaticActor();
 		int GetEntityFromBuffer(PxRigidActor* _actor);
 		void Test();
 		void Update(float deltaTime) ;
 
 		void ShutDown() ;
+
+	private:
+		ThreadPool* threadPool; 
 	};
 };

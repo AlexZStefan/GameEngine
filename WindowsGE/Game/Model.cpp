@@ -1,5 +1,6 @@
 #include "Model.h"
 
+
 namespace GE {
 
 	GE::Model::Model(Shared<Shader> _shader)
@@ -73,7 +74,7 @@ namespace GE {
 		// create object importer
 		Assimp::Importer imp;
 		const aiScene* pScene = nullptr;
-
+	
 		if (flipUV)
 			// additional flags | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices |aiProcess_GenSmoothNormals
 			pScene = imp.ReadFile(filename, aiProcessPreset_TargetRealtime_Quality | aiProcess_FlipUVs);
@@ -90,40 +91,70 @@ namespace GE {
 				"file name is " << filename << std::endl;
 		}
 
-		// for every obj component loop through the array
-		for (int MeshIdx = 0; MeshIdx < pScene->mNumMeshes; MeshIdx++) {
-			// get the first component of the mesh
-			const aiMesh* mesh = pScene->mMeshes[MeshIdx];
+		std::cout << "Fix the indeces of the model here" << std::endl;
 
-			indexCount = mesh->mNumFaces * 3;
-			// loop through faces of the component
-			for (int faceIdx = 0; faceIdx < mesh->mNumFaces; faceIdx++) {
-				const aiFace& face = mesh->mFaces[faceIdx];
-				assert(face.mNumIndices == 3);
+		// std::mutex mtx;
+		// int c = 0;
+		// if (mtx.try_lock()) {
+		// 	c++;
+		// 	std::cout << "ASD AsD  " << c << "\n" << std::endl;
+		// 	mtx.unlock();
+		// }
+		// std::thread t1(Model::testThreads(), testThreads, this);
+		// std::thread t2(testThreads);
+		// 
+		// 
+		// if(t1.joinable())
+		// 	t1.join();
+		// if (t2.joinable())
+		// 	t2.join();
 
-				for (int i = 0; i < face.mNumIndices; i++) {
-					indices.push_back(face.mIndices[i]);
-				}
 
-				// get vertecies of face 
-				for (int vertIdx = 0; vertIdx < 3; vertIdx++) {
-					// get position, texture and normals of the component 
-					const aiVector3D* pos = &mesh->mVertices[face.mIndices[vertIdx]];
-					const aiVector3D* uv = &mesh->mTextureCoords[0][face.mIndices[vertIdx]];
-					if (mesh->HasNormals())
-					{
-						m_hasNormals = 1;
-						const aiVector3D* n = &mesh->mNormals[face.mIndices[vertIdx]];
-						vertices.push_back(Vertex(pos->x, pos->y, pos->z, uv->x, uv->y, n->x, n->y, n->z));
+			// for every obj component loop through the array
+			for (int MeshIdx = 0; MeshIdx < pScene->mNumMeshes; MeshIdx++) {
+				// get the first component of the mesh
+				const aiMesh* mesh = pScene->mMeshes[MeshIdx];
+				indexCount = mesh->mNumFaces * 3;
+
+					// loop through faces of the component
+					for (int faceIdx = 0; faceIdx < mesh->mNumFaces; faceIdx++) {
+						const aiFace& face = mesh->mFaces[faceIdx];
+						assert(face.mNumIndices == 3);
+
+						//std::cout << "Fix the indeces of the model here" << std::endl;
+						for (int i = 0; i < face.mNumIndices; i++) {
+							indices.push_back(face.mIndices[i]);
+						}
+
+						// get vertecies of face 
+						for (int vertIdx = 0; vertIdx < 3; vertIdx++) {
+							// get position, texture and normals of the component 
+							const aiVector3D* pos = &mesh->mVertices[face.mIndices[vertIdx]];
+							const aiVector3D* uv = &mesh->mTextureCoords[0][face.mIndices[vertIdx]];
+							if (mesh->HasNormals())
+							{
+								m_hasNormals = 1;
+								const aiVector3D* n = &mesh->mNormals[face.mIndices[vertIdx]];
+								vertices.push_back(Vertex(pos->x, pos->y, pos->z, uv->x, uv->y, n->x, n->y, n->z));
+							}
+							else {
+								m_hasNormals = 0;
+								vertices.push_back(Vertex(pos->x, pos->y, pos->z, uv->x, uv->y, 0, 0, 0));
+							}
+						}
 					}
-					else {
-						m_hasNormals = 0;
-						vertices.push_back(Vertex(pos->x, pos->y, pos->z, uv->x, uv->y, 0, 0, 0));
-					}}}
-		}
+
+
+			}
+			std::cout << "Finished loading model " << name << std::endl;
+			modelLoaded = true;
+
+
 		numVertices = vertices.size();
 		return true;
 	}
+
+
 	bool Model::loadModel(std::vector<Vertex> _model, std::vector<int> _indices)
 	{
 		std::vector<Vertex>::iterator it;

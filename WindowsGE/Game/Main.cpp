@@ -4,6 +4,7 @@
 #include "SDL.h"   
 #include <stdio.h>
 #include <memory>
+#include "ThreadPool.h"
 
 namespace GE {
 	static int frame_count = 0;
@@ -39,6 +40,8 @@ int main(int argc, char* argv[]) {
 	float frame_second = 1 / 60;
 	int every_second = 0;
 
+	ThreadPool pool(std::thread::hardware_concurrency());
+
 	while (gEngine.keep_running())
 	{
 		current_time = SDL_GetTicks();
@@ -47,7 +50,8 @@ int main(int argc, char* argv[]) {
 		{		
 			last_time = current_time;
 			gEngine.times->time();
-			
+
+			//pool.enqueue(std::bind(&gameEngine.update, delta));
 			gEngine.update(delta);
 			gEngine.draw(delta);
 
